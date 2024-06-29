@@ -1,14 +1,14 @@
 public class Singelton
 {
-    private static PlayerMovementHandler playerMovementHandler;
+    private static PlayerState playerState;
 
-    public static void SetPlayerInputHandler(PlayerMovementHandler _playerMovementHandler)
+    public static void SetPlayerState(PlayerState _playerState)
     {
-        playerMovementHandler = _playerMovementHandler;
+        playerState = _playerState;
     }
 
-    public static PlayerMovementHandler GetPlayerInputHandler()
+    public static PlayerState GetPlayerState()
     {
-        return playerMovementHandler;
+        return playerState;
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -12,8 +10,10 @@ public struct FlowXDetail
     [NonSerialized]
     public float xFlowDirection;
 
+    [Tooltip("Speed ramp linear (Higher means slower speed ramp)")]
     public int xMaxFlowCounter;
 
+    [Tooltip("Top speed")]
     public float xTickDirectionMultiple;
 }
 
@@ -27,18 +27,7 @@ public class PlayerMovementHandler : MonoBehaviour
 
     void Start()
     {
-        if (!!Singelton.GetPlayerInputHandler())
-        {
-            Destroy(this);
-            return;
-        }
-        Singelton.SetPlayerInputHandler(this);
         playerRigidbody = GetComponent<Rigidbody2D>();
-    }
-
-    private void OnDestroy()
-    {
-        Singelton.SetPlayerInputHandler(null);
     }
 
     private void FixedUpdate()
@@ -54,7 +43,6 @@ public class PlayerMovementHandler : MonoBehaviour
         }
 
         Vector2 targetPosition = xTickDirection() + (Vector2)playerRigidbody.transform.position;
-
         playerRigidbody.transform.position = targetPosition;
 
         // What about the in the air
@@ -63,15 +51,14 @@ public class PlayerMovementHandler : MonoBehaviour
 
     private Vector2 xTickDirection()
     {
-        float xDirection = xAccleration;
-
         float clampedMultiplier = Mathf.Clamp(
             (float)flowXDetail.xFlowCounter / flowXDetail.xMaxFlowCounter,
             0,
             1
         );
 
-        xDirection = xDirection * clampedMultiplier;
+        float xDirection = xAccleration * clampedMultiplier;
+
         flowXDetail.xFlowCounter = flowXDetail.xFlowCounter + 1;
 
         Vector2 targetPosition = new Vector2(xDirection * flowXDetail.xTickDirectionMultiple, 0);

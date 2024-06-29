@@ -6,13 +6,31 @@
             "id": "1ceeaccf-1ef3-4a8e-a0f3-a6f496133652",
             "actions": [
                 {
-                    "name": "Movement",
+                    "name": "XMovement",
                     "type": "Value",
                     "id": "89c3c836-58c5-40c5-a600-bc8753f6ce98",
                     "expectedControlType": "Double",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "9e68c2c3-d8dc-4cbe-8ba7-51370b688ffd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "b7b2605a-a800-4f25-bea8-b5b879314fe3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -23,7 +41,7 @@
                     "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "XMovement",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -34,7 +52,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Player",
-                    "action": "Movement",
+                    "action": "XMovement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -45,9 +63,42 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Player",
-                    "action": "Movement",
+                    "action": "XMovement",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7b580fff-3654-4d97-a56b-cea6fff1cd0d",
+                    "path": "<Keyboard>/space",
+                    "interactions": "Press(pressPoint=0.1,behavior=2)",
+                    "processors": "",
+                    "groups": "Player",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86f57621-9c5a-4c2c-8358-1393529cd2a1",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Player",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fbcdfc00-4438-4ef2-bb07-5694b2099d9a",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Player",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
