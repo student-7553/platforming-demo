@@ -9,7 +9,9 @@ public class PlayerDashState : MonoBehaviour
     private Direction currentDirection;
     public int totalTickCountForDash;
     public Vector2 positonAddPerTick;
+
     private float cachedGravityScale;
+
     private float currentTickCount;
 
     void Start()
@@ -25,14 +27,14 @@ public class PlayerDashState : MonoBehaviour
             return;
         }
         Vector2 directionTick = positonAddPerTick * (currentDirection == Direction.RIGHT ? 1 : -1);
-
         Vector2 newPosition = (Vector2)gameObject.transform.position + directionTick;
+
         playerRigidbody.MovePosition(newPosition);
 
         currentTickCount++;
         if (currentTickCount > totalTickCountForDash)
         {
-            playerState.changeState(PlayerPossibleState.GROUND);
+            playerState.changeState(PlayerPossibleState.GROUND, PlayerStateSource.DASH_STATE);
         }
     }
 
@@ -46,7 +48,10 @@ public class PlayerDashState : MonoBehaviour
     public void stateStart(Direction direction)
     {
         isStateActive = true;
+        gameObject.transform.position = gameObject.transform.position;
+
         cachedGravityScale = playerRigidbody.gravityScale;
+
         playerRigidbody.gravityScale = 0;
 
         currentDirection = direction;

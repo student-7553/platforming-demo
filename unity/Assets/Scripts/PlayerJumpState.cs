@@ -8,7 +8,7 @@ public class PlayerJumpState : MonoBehaviour
 
     private bool isStateActive;
 
-    private bool isThrustingUpward;
+    // private bool isThrustingUpward;
 
     private int jumpingFixedCounter = 0;
     public int maxJumpingFixedCounter;
@@ -25,26 +25,14 @@ public class PlayerJumpState : MonoBehaviour
         playerState = GetComponent<PlayerState>();
     }
 
-    private void updateJumpCounter(int newCounter)
-    {
-        jumpingFixedCounter = newCounter;
-
-        if (jumpingFixedCounter >= maxJumpingFixedCounter)
-        {
-            handleJumpEnd();
-        }
-    }
-
     private void FixedUpdate()
     {
         handleJumpTick();
-
-        handleFixedUpdateStateTransition();
     }
 
     private void handleJumpTick()
     {
-        if (!isThrustingUpward)
+        if (!isStateActive)
         {
             return;
         }
@@ -63,40 +51,29 @@ public class PlayerJumpState : MonoBehaviour
 
         playerRigidbody.AddForce(force);
 
-        updateJumpCounter(jumpingFixedCounter + 1);
-    }
+        jumpingFixedCounter = jumpingFixedCounter + 1;
 
-    private void handleFixedUpdateStateTransition()
-    {
-        if (!isStateActive || playerState.isStateChangeOnCooldown)
+        if (jumpingFixedCounter >= maxJumpingFixedCounter)
         {
-            return;
-        }
-
-        bool isOnGrounded = playerGroundObserver.getIsOnGround();
-
-        if (isOnGrounded)
-        {
-            playerState.changeState(PlayerPossibleState.GROUND);
-            return;
+            handleJumpEnd();
         }
     }
 
     public void stateEnd()
     {
-        handleJumpEnd();
-        isStateActive = false;
+        // handleJumpEnd();
+        // isStateActive = false;
     }
 
     public void handleJumpEnd()
     {
-        isThrustingUpward = false;
-        updateJumpCounter(0);
+        isStateActive = false;
+        jumpingFixedCounter = 0;
+        playerState.changeState(PlayerPossibleState.GROUND, PlayerStateSource.JUMP_STATE);
     }
 
     public void stateStart()
     {
         isStateActive = true;
-        isThrustingUpward = true;
     }
 }

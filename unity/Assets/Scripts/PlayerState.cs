@@ -1,18 +1,22 @@
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public enum PlayerPossibleState
 {
     GROUND,
+    FALLING,
     DASHING,
     JUMPING,
 }
 
-// public interface PlayerStateCommon
-// {
-//     public void stateStart();
-//     public void stateEnd();
-// }
+public enum PlayerStateSource
+{
+    GROUND_OBSERVER,
+    DASH_STATE,
+    JUMP_STATE,
+    INPUT,
+}
 
 public class PlayerState : MonoBehaviour
 {
@@ -58,7 +62,12 @@ public class PlayerState : MonoBehaviour
 
     public void handleJumpAction()
     {
-        changeState(PlayerPossibleState.JUMPING);
+        changeState(PlayerPossibleState.JUMPING, PlayerStateSource.INPUT);
+    }
+
+    public void handleDashAction()
+    {
+        changeState(PlayerPossibleState.DASHING, PlayerStateSource.INPUT);
     }
 
     public void handleJumpActionEnd()
@@ -66,16 +75,10 @@ public class PlayerState : MonoBehaviour
         playerJumpHandler.handleJumpEnd();
     }
 
-    public void handleDashAction()
-    {
-        changeState(PlayerPossibleState.DASHING);
-    }
-
     public void handleXMovement(float direction)
     {
         if (currentState == PlayerPossibleState.DASHING)
         {
-            Debug.Log("rejected...");
             return;
         }
         playerMovementHandler.handlePlayerXDirection(direction);
@@ -86,14 +89,12 @@ public class PlayerState : MonoBehaviour
         clampVelocity();
     }
 
-    public bool changeState(PlayerPossibleState newState)
+    private bool isAllowedToChangeStateTo(PlayerPossibleState newState, PlayerStateSource source)
     {
         if (isStateChangeOnCooldown || newState == currentState)
         {
             return false;
         }
-
-        Debug.Log(newState);
 
         switch (newState)
         {
@@ -101,9 +102,48 @@ public class PlayerState : MonoBehaviour
                 // must be ground
                 if (currentState != PlayerPossibleState.GROUND)
                 {
-                    // not possible
                     return false;
                 }
+                break;
+
+            case PlayerPossibleState.FALLING:
+                // must be ground
+                if (currentState != PlayerPossibleState.GROUND)
+                {
+                    return false;
+                }
+                break;
+        }
+        switch (currentState)
+        {
+            case PlayerPossibleState.DASHING:
+                if (source != PlayerStateSource.DASH_STATE)
+                {
+                    return false;
+                }
+                break;
+
+            case PlayerPossibleState.JUMPING:
+                if (source != PlayerStateSource.JUMP_STATE)
+                {
+                    return false;
+                }
+                break;
+        }
+        return true;
+    }
+
+    public bool changeState(PlayerPossibleState newState, PlayerStateSource source)
+    {
+        bool isAllowed = isAllowedToChangeStateTo(newState, source);
+        if (!isAllowed)
+        {
+            return false;
+        }
+
+        switch (newState)
+        {
+            case PlayerPossibleState.JUMPING:
                 playerJumpHandler.stateStart();
                 break;
 
@@ -125,7 +165,16 @@ public class PlayerState : MonoBehaviour
         }
 
         currentState = newState;
-        StartCoroutine(handleIsStateChangeOnCooldown());
+
+        PlayerPossibleState[] cooldownStates = new PlayerPossibleState[]
+        {
+            PlayerPossibleState.DASHING,
+            PlayerPossibleState.JUMPING
+        };
+        if (cooldownStates.Contains(newState))
+        {
+            StartCoroutine(handleIsStateChangeOnCooldown());
+        }
         return true;
     }
 

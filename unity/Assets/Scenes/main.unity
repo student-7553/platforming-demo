@@ -578,8 +578,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67b338254d0348a4ab5afb196c7b47bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalTickCountForDash: 30
-  positonAddPerTick: {x: 0.05, y: 0}
+  totalTickCountForDash: 10
+  positonAddPerTick: {x: 0.2, y: 0}
 --- !u!1 &1621282042
 GameObject:
   m_ObjectHideFlags: 0

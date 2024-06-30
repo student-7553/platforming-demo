@@ -4,20 +4,32 @@ public class PlayerGroundObserver : MonoBehaviour
 {
     private BoxCollider2D playerCollider;
     private float bottomMargin;
+    private PlayerState playerState;
     public LayerMask layerMask;
 
-    bool isOnGround;
-    int totalFramesTouchedGround;
+    private bool isOnGround;
+
+    // int totalFramesTouchedGround;
 
     void Start()
     {
         playerCollider = GetComponent<BoxCollider2D>();
         bottomMargin = playerCollider.size.y / 2f;
+
+        playerState = GetComponent<PlayerState>();
     }
 
     private void FixedUpdate()
     {
-        computeIsOnGround();
+        isOnGround = computeIsOnGround();
+        if (!isOnGround)
+        {
+            playerState.changeState(PlayerPossibleState.FALLING, PlayerStateSource.GROUND_OBSERVER);
+        }
+        else
+        {
+            playerState.changeState(PlayerPossibleState.GROUND, PlayerStateSource.GROUND_OBSERVER);
+        }
     }
 
     public bool getIsOnGround()
@@ -25,7 +37,7 @@ public class PlayerGroundObserver : MonoBehaviour
         return isOnGround;
     }
 
-    private void computeIsOnGround()
+    private bool computeIsOnGround()
     {
         Vector2 originPosition = new Vector2(
             gameObject.transform.position.x,
@@ -42,8 +54,6 @@ public class PlayerGroundObserver : MonoBehaviour
         Vector3 clonedPosition = gameObject.transform.position;
         clonedPosition.y = clonedPosition.y - bottomMargin;
 
-        // Debug.DrawRay(clonedPosition, Vector3.down * 0.2f, Color.red);
-
-        isOnGround = !!rayCastResult.collider;
+        return !!rayCastResult.collider;
     }
 }
