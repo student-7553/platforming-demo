@@ -17,10 +17,17 @@ public struct FlowXDetail
     public float xTickDirectionMultiple;
 }
 
+public enum Direction
+{
+    RIGHT,
+    LEFT
+}
+
 public class PlayerMovementHandler : MonoBehaviour
 {
     Rigidbody2D playerRigidbody;
     private float xAccleration;
+    public Direction direction;
 
     [SerializeField]
     public FlowXDetail flowXDetail;
@@ -41,8 +48,17 @@ public class PlayerMovementHandler : MonoBehaviour
         {
             return;
         }
+        Vector2 xTickDir = xTickDirection();
+        if (xTickDir.x > 0)
+        {
+            direction = Direction.RIGHT;
+        }
+        else
+        {
+            direction = Direction.LEFT;
+        }
 
-        Vector2 targetPosition = xTickDirection() + (Vector2)playerRigidbody.transform.position;
+        Vector2 targetPosition = xTickDir + (Vector2)playerRigidbody.transform.position;
         playerRigidbody.transform.position = targetPosition;
 
         // What about the in the air

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerJumpHandler : MonoBehaviour
+public class PlayerJumpState : MonoBehaviour
 {
     private Rigidbody2D playerRigidbody;
     private PlayerGroundObserver playerGroundObserver;
@@ -73,14 +73,19 @@ public class PlayerJumpHandler : MonoBehaviour
             return;
         }
 
-        bool isGrounded = playerGroundObserver.isOnGround();
-        if (isGrounded)
+        bool isOnGrounded = playerGroundObserver.getIsOnGround();
+
+        if (isOnGrounded)
         {
-            isStateActive = false;
-            handleJumpEnd();
             playerState.changeState(PlayerPossibleState.GROUND);
             return;
         }
+    }
+
+    public void stateEnd()
+    {
+        handleJumpEnd();
+        isStateActive = false;
     }
 
     public void handleJumpEnd()
@@ -89,7 +94,7 @@ public class PlayerJumpHandler : MonoBehaviour
         updateJumpCounter(0);
     }
 
-    public void handlePlayerJumpStateStart()
+    public void stateStart()
     {
         isStateActive = true;
         isThrustingUpward = true;

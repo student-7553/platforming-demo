@@ -6,9 +6,8 @@ public class PlayerGroundObserver : MonoBehaviour
     private float bottomMargin;
     public LayerMask layerMask;
 
-    bool isCurrentlyTouchingGround;
-
-    float totalFramesTouchedGround;
+    bool isOnGround;
+    int totalFramesTouchedGround;
 
     void Start()
     {
@@ -18,10 +17,15 @@ public class PlayerGroundObserver : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // isOnGround();
+        computeIsOnGround();
     }
 
-    public bool isOnGround()
+    public bool getIsOnGround()
+    {
+        return isOnGround;
+    }
+
+    private void computeIsOnGround()
     {
         Vector2 originPosition = new Vector2(
             gameObject.transform.position.x,
@@ -40,6 +44,6 @@ public class PlayerGroundObserver : MonoBehaviour
 
         // Debug.DrawRay(clonedPosition, Vector3.down * 0.2f, Color.red);
 
-        return !!rayCastResult.collider;
+        isOnGround = !!rayCastResult.collider;
     }
 }

@@ -357,6 +357,7 @@ GameObject:
   - component: {fileID: 1292924929}
   - component: {fileID: 1292924930}
   - component: {fileID: 1292924927}
+  - component: {fileID: 1292924931}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -443,6 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1034a1359a5dd34da83dbbb93fcf603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  direction: 0
   flowXDetail:
     xMaxFlowCounter: 7
     xTickDirectionMultiple: 0.05
@@ -561,9 +563,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d79589742bda1344a832f995116393ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  possibleState: 0
+  currentState: 0
   isStateChangeOnCooldown: 0
   maxYVelocity: 4
+--- !u!114 &1292924931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292924922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b338254d0348a4ab5afb196c7b47bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalTickCountForDash: 30
+  positonAddPerTick: {x: 0.05, y: 0}
 --- !u!1 &1621282042
 GameObject:
   m_ObjectHideFlags: 0

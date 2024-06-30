@@ -8,10 +8,16 @@ public enum PlayerPossibleState
     JUMPING,
 }
 
+// public interface PlayerStateCommon
+// {
+//     public void stateStart();
+//     public void stateEnd();
+// }
+
 public class PlayerState : MonoBehaviour
 {
     [SerializeField]
-    private PlayerPossibleState possibleState;
+    private PlayerPossibleState currentState;
 
     private Rigidbody2D playerRigidbody;
 
@@ -19,7 +25,9 @@ public class PlayerState : MonoBehaviour
 
     private PlayerMovementHandler playerMovementHandler;
 
-    private PlayerJumpHandler playerJumpHandler;
+    private PlayerJumpState playerJumpHandler;
+
+    private PlayerDashState playerDashState;
 
     public bool isStateChangeOnCooldown;
 
@@ -37,9 +45,10 @@ public class PlayerState : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody2D>();
         playerGroundObserver = GetComponent<PlayerGroundObserver>();
         playerMovementHandler = GetComponent<PlayerMovementHandler>();
-        playerJumpHandler = GetComponent<PlayerJumpHandler>();
+        playerJumpHandler = GetComponent<PlayerJumpState>();
+        playerDashState = GetComponent<PlayerDashState>();
 
-        possibleState = PlayerPossibleState.GROUND;
+        currentState = PlayerPossibleState.GROUND;
     }
 
     private void OnDestroy()
@@ -49,11 +58,6 @@ public class PlayerState : MonoBehaviour
 
     public void handleJumpAction()
     {
-        if (possibleState != PlayerPossibleState.GROUND)
-        {
-            return;
-        }
-
         changeState(PlayerPossibleState.JUMPING);
     }
 
@@ -62,8 +66,18 @@ public class PlayerState : MonoBehaviour
         playerJumpHandler.handleJumpEnd();
     }
 
+    public void handleDashAction()
+    {
+        changeState(PlayerPossibleState.DASHING);
+    }
+
     public void handleXMovement(float direction)
     {
+        if (currentState == PlayerPossibleState.DASHING)
+        {
+            Debug.Log("rejected...");
+            return;
+        }
         playerMovementHandler.handlePlayerXDirection(direction);
     }
 
@@ -72,23 +86,47 @@ public class PlayerState : MonoBehaviour
         clampVelocity();
     }
 
-    public void changeState(PlayerPossibleState newState)
+    public bool changeState(PlayerPossibleState newState)
     {
-        if (isStateChangeOnCooldown)
+        if (isStateChangeOnCooldown || newState == currentState)
         {
-            return;
+            return false;
         }
-        Debug.Log(newState);
 
-        possibleState = newState;
+        Debug.Log(newState);
 
         switch (newState)
         {
             case PlayerPossibleState.JUMPING:
-                playerJumpHandler.handlePlayerJumpStateStart();
+                // must be ground
+                if (currentState != PlayerPossibleState.GROUND)
+                {
+                    // not possible
+                    return false;
+                }
+                playerJumpHandler.stateStart();
+                break;
+
+            case PlayerPossibleState.DASHING:
+
+                playerMovementHandler.handlePlayerXDirection(0);
+                playerDashState.stateStart(playerMovementHandler.direction);
                 break;
         }
+
+        switch (currentState)
+        {
+            case PlayerPossibleState.JUMPING:
+                playerJumpHandler.stateEnd();
+                break;
+            case PlayerPossibleState.DASHING:
+                playerDashState.stateEnd();
+                break;
+        }
+
+        currentState = newState;
         StartCoroutine(handleIsStateChangeOnCooldown());
+        return true;
     }
 
     public IEnumerator handleIsStateChangeOnCooldown()

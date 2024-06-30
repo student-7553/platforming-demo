@@ -37,7 +37,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnDashAction(InputAction.CallbackContext context)
     {
-        // Singelton.GetPlayerState()?.handleJumpAction();
+        Singelton.GetPlayerState().handleDashAction();
     }
 
     public void OnXMovementAction(InputAction.CallbackContext context)
