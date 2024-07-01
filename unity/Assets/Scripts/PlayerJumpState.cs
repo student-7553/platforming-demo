@@ -8,8 +8,6 @@ public class PlayerJumpState : MonoBehaviour
 
     private bool isStateActive;
 
-    // private bool isThrustingUpward;
-
     private int jumpingFixedCounter = 0;
     public int maxJumpingFixedCounter;
     public int toThePowerOf;
@@ -61,15 +59,15 @@ public class PlayerJumpState : MonoBehaviour
 
     public void stateEnd()
     {
-        // handleJumpEnd();
-        // isStateActive = false;
+        isStateActive = false;
+
+        playerRigidbody.velocity = Vector2.zero;
+        jumpingFixedCounter = 0;
     }
 
     public void handleJumpEnd()
     {
-        isStateActive = false;
-        jumpingFixedCounter = 0;
-        playerState.changeState(PlayerPossibleState.GROUND, PlayerStateSource.JUMP_STATE);
+        playerState.changeState(PlayerPossibleState.GROUND, PlayerStateSource.JUMP_STATE, false);
     }
 
     public void stateStart()

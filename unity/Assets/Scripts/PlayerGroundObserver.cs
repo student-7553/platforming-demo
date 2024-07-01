@@ -21,14 +21,26 @@ public class PlayerGroundObserver : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (playerState.isStateChangeOnCooldown)
+        {
+            return;
+        }
         isOnGround = computeIsOnGround();
         if (!isOnGround)
         {
-            playerState.changeState(PlayerPossibleState.FALLING, PlayerStateSource.GROUND_OBSERVER);
+            playerState.changeState(
+                PlayerPossibleState.FALLING,
+                PlayerStateSource.GROUND_OBSERVER,
+                false
+            );
         }
         else
         {
-            playerState.changeState(PlayerPossibleState.GROUND, PlayerStateSource.GROUND_OBSERVER);
+            playerState.changeState(
+                PlayerPossibleState.GROUND,
+                PlayerStateSource.GROUND_OBSERVER,
+                false
+            );
         }
     }
 
@@ -51,8 +63,8 @@ public class PlayerGroundObserver : MonoBehaviour
             layerMask
         );
 
-        Vector3 clonedPosition = gameObject.transform.position;
-        clonedPosition.y = clonedPosition.y - bottomMargin;
+        // Vector3 clonedPosition = gameObject.transform.position;
+        // clonedPosition.y = clonedPosition.y - bottomMargin;
 
         return !!rayCastResult.collider;
     }

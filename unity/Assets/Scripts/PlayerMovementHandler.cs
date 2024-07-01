@@ -28,6 +28,7 @@ public class PlayerMovementHandler : MonoBehaviour
     Rigidbody2D playerRigidbody;
     private float xAccleration;
     public Direction direction;
+    private bool isDisabled;
 
     [SerializeField]
     public FlowXDetail flowXDetail;
@@ -44,10 +45,12 @@ public class PlayerMovementHandler : MonoBehaviour
 
     private void handleXTick()
     {
-        if (xAccleration == 0)
+        if (xAccleration == 0 || isDisabled)
         {
             return;
         }
+        Debug.Log("handleXTick");
+
         Vector2 xTickDir = xTickDirection();
         if (xTickDir.x > 0)
         {
@@ -60,9 +63,6 @@ public class PlayerMovementHandler : MonoBehaviour
 
         Vector2 targetPosition = xTickDir + (Vector2)playerRigidbody.transform.position;
         playerRigidbody.transform.position = targetPosition;
-
-        // What about the in the air
-        // What about in mid dash
     }
 
     private Vector2 xTickDirection()
@@ -82,7 +82,7 @@ public class PlayerMovementHandler : MonoBehaviour
         return targetPosition;
     }
 
-    public void handlePlayerXDirection(float direction)
+    public void handlePlayerXDirectionInput(float direction)
     {
         if (flowXDetail.xFlowDirection != direction)
         {
@@ -91,5 +91,15 @@ public class PlayerMovementHandler : MonoBehaviour
         }
 
         xAccleration = direction;
+    }
+
+    public void handleDisableMovement()
+    {
+        isDisabled = true;
+    }
+
+    public void handleUnDisableMovement()
+    {
+        isDisabled = false;
     }
 }

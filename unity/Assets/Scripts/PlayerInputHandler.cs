@@ -43,6 +43,6 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnXMovementAction(InputAction.CallbackContext context)
     {
         float xDirection = context.ReadValue<float>();
-        Singelton.GetPlayerState().handleXMovement(xDirection);
+        Singelton.GetPlayerState().playerMovementHandler.handlePlayerXDirectionInput(xDirection);
     }
 }
