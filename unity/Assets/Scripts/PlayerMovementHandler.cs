@@ -17,17 +17,12 @@ public struct FlowXDetail
     public float xTickDirectionMultiple;
 }
 
-public enum Direction
-{
-    RIGHT,
-    LEFT
-}
-
 public class PlayerMovementHandler : MonoBehaviour
 {
-    Rigidbody2D playerRigidbody;
-    private float xAccleration;
-    public Direction direction;
+    private Rigidbody2D playerRigidbody;
+
+    public Vector2 direction;
+
     private bool isDisabled;
 
     [SerializeField]
@@ -45,21 +40,12 @@ public class PlayerMovementHandler : MonoBehaviour
 
     private void handleXTick()
     {
-        if (xAccleration == 0 || isDisabled)
+        if (direction.x == 0 || isDisabled)
         {
             return;
         }
-        Debug.Log("handleXTick");
 
         Vector2 xTickDir = xTickDirection();
-        if (xTickDir.x > 0)
-        {
-            direction = Direction.RIGHT;
-        }
-        else
-        {
-            direction = Direction.LEFT;
-        }
 
         Vector2 targetPosition = xTickDir + (Vector2)playerRigidbody.transform.position;
         playerRigidbody.transform.position = targetPosition;
@@ -73,7 +59,7 @@ public class PlayerMovementHandler : MonoBehaviour
             1
         );
 
-        float xDirection = xAccleration * clampedMultiplier;
+        float xDirection = (direction.x > 0 ? 1 : -1) * clampedMultiplier;
 
         flowXDetail.xFlowCounter = flowXDetail.xFlowCounter + 1;
 
@@ -82,15 +68,14 @@ public class PlayerMovementHandler : MonoBehaviour
         return targetPosition;
     }
 
-    public void handlePlayerXDirectionInput(float direction)
+    public void handlePlayerDirectionInput(Vector2 directionInput)
     {
-        if (flowXDetail.xFlowDirection != direction)
+        if (flowXDetail.xFlowDirection != direction.x)
         {
-            flowXDetail.xFlowDirection = direction;
+            flowXDetail.xFlowDirection = direction.x;
             flowXDetail.xFlowCounter = 0;
         }
-
-        xAccleration = direction;
+        direction = directionInput;
     }
 
     public void handleDisableMovement()

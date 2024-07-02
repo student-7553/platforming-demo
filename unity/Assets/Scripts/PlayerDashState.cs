@@ -7,9 +7,10 @@ public class PlayerDashState : MonoBehaviour
     private PlayerMovementHandler playerMovementHandler;
     private bool isStateActive;
 
-    private Direction currentDirection;
+    private Vector2 currentDirection;
     public int totalTickCountForDash;
-    public Vector2 positonAddPerTick;
+
+    public float positonAddPerTick;
 
     private float cachedGravityScale;
 
@@ -22,13 +23,30 @@ public class PlayerDashState : MonoBehaviour
         playerMovementHandler = GetComponent<PlayerMovementHandler>();
     }
 
+    private Vector2 getCurrentDirectionVector()
+    {
+        Vector2 directionVector = Vector2.zero;
+        if (currentDirection.x != 0)
+        {
+            directionVector.x = positonAddPerTick * currentDirection.x;
+        }
+
+        if (currentDirection.y != 0)
+        {
+            directionVector.y = positonAddPerTick * currentDirection.y;
+        }
+        return directionVector;
+    }
+
     private void FixedUpdate()
     {
         if (!isStateActive)
         {
             return;
         }
-        Vector2 directionTick = positonAddPerTick * (currentDirection == Direction.RIGHT ? 1 : -1);
+
+        Vector2 directionTick = getCurrentDirectionVector();
+
         Vector2 newPosition = (Vector2)gameObject.transform.position + directionTick;
 
         playerRigidbody.MovePosition(newPosition);
@@ -53,7 +71,7 @@ public class PlayerDashState : MonoBehaviour
         playerMovementHandler.handleUnDisableMovement();
     }
 
-    public void stateStart(Direction direction)
+    public void stateStart(Vector2 direction)
     {
         isStateActive = true;
         cachedGravityScale = playerRigidbody.gravityScale;

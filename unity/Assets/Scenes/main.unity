@@ -297,6 +297,7 @@ MonoBehaviour:
   movementAction: {fileID: -2022057203062882770, guid: f0656c8ad5a2d3141a32fa332f9dad5f, type: 3}
   jumpAction: {fileID: -5549182729638475130, guid: f0656c8ad5a2d3141a32fa332f9dad5f, type: 3}
   dashAction: {fileID: 1830251537500922972, guid: f0656c8ad5a2d3141a32fa332f9dad5f, type: 3}
+  movement2dAction: {fileID: -2899967145748956660, guid: f0656c8ad5a2d3141a32fa332f9dad5f, type: 3}
 --- !u!1 &1262685416
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,6 +565,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
+  playerMovementHandler: {fileID: 0}
   isStateChangeOnCooldown: 0
   maxYVelocity: 4
 --- !u!114 &1292924931
@@ -579,7 +581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   totalTickCountForDash: 10
-  positonAddPerTick: {x: 0.2, y: 0}
+  positonAddPerTick: 0.2
 --- !u!1 &1621282042
 GameObject:
   m_ObjectHideFlags: 0
