@@ -359,6 +359,7 @@ GameObject:
   - component: {fileID: 1292924927}
   - component: {fileID: 1292924931}
   - component: {fileID: 1292924932}
+  - component: {fileID: 1292924933}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -595,6 +596,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxYSlidingVelocity: 0.1
+--- !u!114 &1292924933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292924922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac687e499e4955843a49f4110990ecea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxTickCounter: 5
+  jumpDirection: {x: 1, y: 1}
+  singleTickThrust: 35
+  jumpInitialVelocity: {x: 6, y: 3}
 --- !u!1 &1621282042
 GameObject:
   m_ObjectHideFlags: 0

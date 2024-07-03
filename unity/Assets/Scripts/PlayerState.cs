@@ -10,6 +10,7 @@ public enum PlayerPossibleState
     DASHING,
     JUMPING,
     SLIDING,
+    SLIDE_JUMPING
 }
 
 public enum PlayerStateSource
@@ -41,6 +42,7 @@ public class PlayerState : MonoBehaviour
 
     private PlayerDashState playerDashState;
     private PlayerSlideState playerSlideState;
+    private PlayerSlideJumpState playerSlideJumpState;
 
     public bool isStateChangeOnCooldown;
 
@@ -61,6 +63,7 @@ public class PlayerState : MonoBehaviour
         playerJumpHandler = GetComponent<PlayerJumpState>();
         playerDashState = GetComponent<PlayerDashState>();
         playerSlideState = GetComponent<PlayerSlideState>();
+        playerSlideJumpState = GetComponent<PlayerSlideJumpState>();
 
         currentState = PlayerPossibleState.GROUND;
     }
@@ -72,11 +75,15 @@ public class PlayerState : MonoBehaviour
 
     public void handleJumpAction()
     {
-        if (currentState != PlayerPossibleState.GROUND)
+        if (currentState == PlayerPossibleState.GROUND)
         {
+            changeState(PlayerPossibleState.JUMPING);
             return;
         }
-        changeState(PlayerPossibleState.JUMPING);
+        if (currentState == PlayerPossibleState.SLIDING)
+        {
+            changeState(PlayerPossibleState.SLIDE_JUMPING);
+        }
     }
 
     public void handleDashAction()
@@ -124,7 +131,11 @@ public class PlayerState : MonoBehaviour
             case PlayerPossibleState.JUMPING:
                 playerJumpHandler.stateStart();
                 break;
-
+            case PlayerPossibleState.SLIDE_JUMPING:
+                playerSlideJumpState.stateStart(
+                    playerMovementHandler.direction.x > 0 ? true : false
+                );
+                break;
             case PlayerPossibleState.DASHING:
                 playerDashState.stateStart(playerMovementHandler.direction);
                 playerMovementHandler.handleDisableMovement();
@@ -145,6 +156,9 @@ public class PlayerState : MonoBehaviour
                 break;
             case PlayerPossibleState.SLIDING:
                 playerSlideState.stateEnd();
+                break;
+            case PlayerPossibleState.SLIDE_JUMPING:
+                playerSlideJumpState.stateEnd();
                 break;
         }
 
