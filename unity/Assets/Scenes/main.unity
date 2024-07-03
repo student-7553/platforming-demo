@@ -358,6 +358,7 @@ GameObject:
   - component: {fileID: 1292924930}
   - component: {fileID: 1292924927}
   - component: {fileID: 1292924931}
+  - component: {fileID: 1292924932}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -491,7 +492,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.475, y: 0.475}
+  m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
 --- !u!50 &1292924927
 Rigidbody2D:
@@ -581,6 +582,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalTickCountForDash: 10
   positonAddPerTick: 0.2
+--- !u!114 &1292924932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292924922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c7e8e5f4e59294c88a6a5222371ee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxYSlidingVelocity: 0.1
 --- !u!1 &1621282042
 GameObject:
   m_ObjectHideFlags: 0

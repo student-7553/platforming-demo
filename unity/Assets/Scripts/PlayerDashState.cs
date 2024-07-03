@@ -53,12 +53,7 @@ public class PlayerDashState : MonoBehaviour
         currentTickCount++;
         if (currentTickCount > totalTickCountForDash)
         {
-            // todo handle this qq
-            playerState.changeState(
-                PlayerPossibleState.GROUND,
-                PlayerStateSource.DASH_STATE,
-                false
-            );
+            playerState.changeState(PlayerPossibleState.NONE);
         }
     }
 

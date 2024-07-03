@@ -20,10 +20,16 @@ public enum PlayerStateSource
     INPUT,
 }
 
+// interface PlayerStateFunction
+// {
+//     public void stateStart();
+//     public void stateEnd();
+// }
+
 public class PlayerState : MonoBehaviour
 {
     [SerializeField]
-    private PlayerPossibleState currentState;
+    public PlayerPossibleState currentState;
 
     private Rigidbody2D playerRigidbody;
 
@@ -34,6 +40,7 @@ public class PlayerState : MonoBehaviour
     private PlayerJumpState playerJumpHandler;
 
     private PlayerDashState playerDashState;
+    private PlayerSlideState playerSlideState;
 
     public bool isStateChangeOnCooldown;
 
@@ -53,6 +60,7 @@ public class PlayerState : MonoBehaviour
         playerMovementHandler = GetComponent<PlayerMovementHandler>();
         playerJumpHandler = GetComponent<PlayerJumpState>();
         playerDashState = GetComponent<PlayerDashState>();
+        playerSlideState = GetComponent<PlayerSlideState>();
 
         currentState = PlayerPossibleState.GROUND;
     }
@@ -64,12 +72,17 @@ public class PlayerState : MonoBehaviour
 
     public void handleJumpAction()
     {
-        changeState(PlayerPossibleState.JUMPING, PlayerStateSource.INPUT, false);
+        if (currentState != PlayerPossibleState.GROUND)
+        {
+            return;
+        }
+        changeState(PlayerPossibleState.JUMPING);
     }
 
     public void handleDashAction()
     {
-        changeState(PlayerPossibleState.DASHING, PlayerStateSource.INPUT, true);
+        //ok
+        changeState(PlayerPossibleState.DASHING);
     }
 
     public void handleJumpActionEnd()
@@ -86,58 +99,20 @@ public class PlayerState : MonoBehaviour
         clampVelocity();
     }
 
-    private bool isAllowedToChangeStateTo(
-        PlayerPossibleState newState,
-        PlayerStateSource source,
-        bool isHighPriority
-    )
+    //This needs to be handled from the states themself
+    private bool isAllowedToChangeStateTo(PlayerPossibleState newState)
     {
         if (newState == currentState)
         {
             return false;
         }
 
-        switch (newState)
-        {
-            case PlayerPossibleState.JUMPING:
-                // must be ground
-                if (currentState != PlayerPossibleState.GROUND)
-                {
-                    return false;
-                }
-                break;
-        }
-        if (isHighPriority)
-        {
-            return true;
-        }
-
-        switch (currentState)
-        {
-            case PlayerPossibleState.DASHING:
-                if (source != PlayerStateSource.DASH_STATE)
-                {
-                    return false;
-                }
-                break;
-
-            case PlayerPossibleState.JUMPING:
-                if (source != PlayerStateSource.JUMP_STATE)
-                {
-                    return false;
-                }
-                break;
-        }
         return true;
     }
 
-    public bool changeState(
-        PlayerPossibleState newState,
-        PlayerStateSource source,
-        bool isHighPriority
-    )
+    public bool changeState(PlayerPossibleState newState)
     {
-        bool isAllowed = isAllowedToChangeStateTo(newState, source, isHighPriority);
+        bool isAllowed = isAllowedToChangeStateTo(newState);
 
         if (!isAllowed)
         {
@@ -154,6 +129,9 @@ public class PlayerState : MonoBehaviour
                 playerDashState.stateStart(playerMovementHandler.direction);
                 playerMovementHandler.handleDisableMovement();
                 break;
+            case PlayerPossibleState.SLIDING:
+                playerSlideState.stateStart();
+                break;
         }
 
         switch (currentState)
@@ -164,6 +142,9 @@ public class PlayerState : MonoBehaviour
             case PlayerPossibleState.DASHING:
                 playerDashState.stateEnd();
                 playerMovementHandler.handleUnDisableMovement();
+                break;
+            case PlayerPossibleState.SLIDING:
+                playerSlideState.stateEnd();
                 break;
         }
 
@@ -183,7 +164,7 @@ public class PlayerState : MonoBehaviour
 
     public IEnumerator handleIsStateChangeOnCooldown()
     {
-        //This function should prob be in jump handler tbh
+        // This function should prob be in jump handler tbh
         isStateChangeOnCooldown = true;
         yield return new WaitForSeconds(0.05f);
         isStateChangeOnCooldown = false;

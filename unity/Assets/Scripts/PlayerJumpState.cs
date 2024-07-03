@@ -66,8 +66,7 @@ public class PlayerJumpState : MonoBehaviour
 
     public void handleJumpEnd()
     {
-        //Todo handle this qq
-        playerState.changeState(PlayerPossibleState.NONE, PlayerStateSource.JUMP_STATE, false);
+        playerState.changeState(PlayerPossibleState.NONE);
     }
 
     public void stateStart()

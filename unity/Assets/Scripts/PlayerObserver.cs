@@ -31,7 +31,15 @@ public class PlayerObserver : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (playerState.isStateChangeOnCooldown)
+        if (
+            playerState.isStateChangeOnCooldown
+            || (
+                playerState.currentState != PlayerPossibleState.NONE
+                && playerState.currentState != PlayerPossibleState.FALLING
+                && playerState.currentState != PlayerPossibleState.GROUND
+                && playerState.currentState != PlayerPossibleState.SLIDING
+            )
+        )
         {
             return;
         }
@@ -40,31 +48,27 @@ public class PlayerObserver : MonoBehaviour
 
         if (observedState == ObservedState.GROUND)
         {
-            playerState.changeState(
-                PlayerPossibleState.GROUND,
-                PlayerStateSource.GROUND_OBSERVER,
-                false
-            );
+            playerState.changeState(PlayerPossibleState.GROUND);
             return;
         }
         if (
             observedState == ObservedState.SLIDING_LEFT
-            || observedState == ObservedState.SLIDING_RIGHT
+            && playerState.playerMovementHandler.direction.x < 0
         )
         {
-            playerState.changeState(
-                PlayerPossibleState.SLIDING,
-                PlayerStateSource.GROUND_OBSERVER,
-                false
-            );
+            playerState.changeState(PlayerPossibleState.SLIDING);
+            return;
+        }
+        if (
+            observedState == ObservedState.SLIDING_RIGHT
+            && playerState.playerMovementHandler.direction.x > 0
+        )
+        {
+            playerState.changeState(PlayerPossibleState.SLIDING);
             return;
         }
         //
-        playerState.changeState(
-            PlayerPossibleState.FALLING,
-            PlayerStateSource.GROUND_OBSERVER,
-            false
-        );
+        playerState.changeState(PlayerPossibleState.FALLING);
     }
 
     private ObservedState getObservedState()
