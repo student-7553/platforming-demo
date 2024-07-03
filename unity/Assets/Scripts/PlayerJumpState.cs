@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerJumpState : MonoBehaviour
 {
     private Rigidbody2D playerRigidbody;
-    private PlayerGroundObserver playerGroundObserver;
+
     private PlayerState playerState;
 
     private bool isStateActive;
@@ -19,7 +19,6 @@ public class PlayerJumpState : MonoBehaviour
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
-        playerGroundObserver = GetComponent<PlayerGroundObserver>();
         playerState = GetComponent<PlayerState>();
     }
 
@@ -67,7 +66,8 @@ public class PlayerJumpState : MonoBehaviour
 
     public void handleJumpEnd()
     {
-        playerState.changeState(PlayerPossibleState.GROUND, PlayerStateSource.JUMP_STATE, false);
+        //Todo handle this qq
+        playerState.changeState(PlayerPossibleState.NONE, PlayerStateSource.JUMP_STATE, false);
     }
 
     public void stateStart()

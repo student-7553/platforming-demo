@@ -4,7 +4,7 @@ public class PlayerDashState : MonoBehaviour
 {
     private Rigidbody2D playerRigidbody;
     private PlayerState playerState;
-    private PlayerMovementHandler playerMovementHandler;
+
     private bool isStateActive;
 
     private Vector2 currentDirection;
@@ -20,7 +20,6 @@ public class PlayerDashState : MonoBehaviour
     {
         playerState = GetComponent<PlayerState>();
         playerRigidbody = GetComponent<Rigidbody2D>();
-        playerMovementHandler = GetComponent<PlayerMovementHandler>();
     }
 
     private Vector2 getCurrentDirectionVector()
@@ -54,6 +53,7 @@ public class PlayerDashState : MonoBehaviour
         currentTickCount++;
         if (currentTickCount > totalTickCountForDash)
         {
+            // todo handle this qq
             playerState.changeState(
                 PlayerPossibleState.GROUND,
                 PlayerStateSource.DASH_STATE,
@@ -68,7 +68,6 @@ public class PlayerDashState : MonoBehaviour
         currentTickCount = 0;
 
         playerRigidbody.gravityScale = cachedGravityScale;
-        playerMovementHandler.handleUnDisableMovement();
     }
 
     public void stateStart(Vector2 direction)
@@ -78,7 +77,5 @@ public class PlayerDashState : MonoBehaviour
 
         playerRigidbody.gravityScale = 0;
         currentDirection = direction;
-
-        playerMovementHandler.handleDisableMovement();
     }
 }

@@ -4,10 +4,12 @@ using System.Linq;
 
 public enum PlayerPossibleState
 {
+    NONE,
     GROUND,
     FALLING,
     DASHING,
     JUMPING,
+    SLIDING,
 }
 
 public enum PlayerStateSource
@@ -25,7 +27,7 @@ public class PlayerState : MonoBehaviour
 
     private Rigidbody2D playerRigidbody;
 
-    private PlayerGroundObserver playerGroundObserver;
+    private PlayerObserver playerObserver;
 
     public PlayerMovementHandler playerMovementHandler;
 
@@ -47,7 +49,7 @@ public class PlayerState : MonoBehaviour
         Singelton.SetPlayerState(this);
 
         playerRigidbody = GetComponent<Rigidbody2D>();
-        playerGroundObserver = GetComponent<PlayerGroundObserver>();
+        playerObserver = GetComponent<PlayerObserver>();
         playerMovementHandler = GetComponent<PlayerMovementHandler>();
         playerJumpHandler = GetComponent<PlayerJumpState>();
         playerDashState = GetComponent<PlayerDashState>();
@@ -72,6 +74,10 @@ public class PlayerState : MonoBehaviour
 
     public void handleJumpActionEnd()
     {
+        if (currentState != PlayerPossibleState.JUMPING)
+        {
+            return;
+        }
         playerJumpHandler.handleJumpEnd();
     }
 
@@ -94,14 +100,6 @@ public class PlayerState : MonoBehaviour
         switch (newState)
         {
             case PlayerPossibleState.JUMPING:
-                // must be ground
-                if (currentState != PlayerPossibleState.GROUND)
-                {
-                    return false;
-                }
-                break;
-
-            case PlayerPossibleState.FALLING:
                 // must be ground
                 if (currentState != PlayerPossibleState.GROUND)
                 {
@@ -140,6 +138,7 @@ public class PlayerState : MonoBehaviour
     )
     {
         bool isAllowed = isAllowedToChangeStateTo(newState, source, isHighPriority);
+
         if (!isAllowed)
         {
             return false;
@@ -153,6 +152,7 @@ public class PlayerState : MonoBehaviour
 
             case PlayerPossibleState.DASHING:
                 playerDashState.stateStart(playerMovementHandler.direction);
+                playerMovementHandler.handleDisableMovement();
                 break;
         }
 
@@ -163,6 +163,7 @@ public class PlayerState : MonoBehaviour
                 break;
             case PlayerPossibleState.DASHING:
                 playerDashState.stateEnd();
+                playerMovementHandler.handleUnDisableMovement();
                 break;
         }
 
