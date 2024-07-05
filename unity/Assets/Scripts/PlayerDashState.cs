@@ -47,8 +47,6 @@ public class PlayerDashState : MonoBehaviour
 
         Vector2 directionTick = getCurrentDirectionVector();
 
-        // Debug.Log(directionTick);
-
         Vector2 newPosition = (Vector2)gameObject.transform.position + directionTick;
 
         playerRigidbody.MovePosition(newPosition);
@@ -57,7 +55,6 @@ public class PlayerDashState : MonoBehaviour
         if (currentTickCount > totalTickCountForDash)
         {
             playerState.changeState(PlayerPossibleState.DASHING_AFTER);
-            // playerState.changeState(PlayerPossibleState.NONE);
         }
     }
 
