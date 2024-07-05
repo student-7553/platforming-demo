@@ -17,6 +17,7 @@ public class PlayerDashAfterState : MonoBehaviour
     private bool isActivated;
     private int totalTickCount;
     private int currentTickCount;
+    private DASH_TYPE preDashType;
 
     public int graceTickCount;
     public int jumpTotalTickCount;
@@ -73,6 +74,11 @@ public class PlayerDashAfterState : MonoBehaviour
         {
             return;
         }
+        if (preDashType == DASH_TYPE.OTHERS)
+        {
+            return;
+        }
+
         isActivated = true;
 
         totalTickCount = jumpTotalTickCount + currentTickCount;
@@ -91,7 +97,7 @@ public class PlayerDashAfterState : MonoBehaviour
         // jumpInitialVelocity
     }
 
-    public void stateStart(Vector2 direction)
+    public void stateStart(Vector2 direction, DASH_TYPE _preDashType)
     {
         isStateActive = true;
         currentTickCount = 0;
@@ -100,7 +106,7 @@ public class PlayerDashAfterState : MonoBehaviour
         directionState =
             direction.x > 0 ? DashAfterDirection.SUPER_RIGHT : DashAfterDirection.SUPER_LEFT;
 
-        // cachedGravityScale = playerRigidbody.gravityScale;
+        preDashType = _preDashType;
 
         // playerRigidbody.gravityScale = 0;
         // currentDirection = direction;

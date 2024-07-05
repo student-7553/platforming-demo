@@ -29,7 +29,7 @@ public class PlayerState : MonoBehaviour
 
     private Rigidbody2D playerRigidbody;
 
-    private PlayerObserver playerObserver;
+    public PlayerObserver playerObserver;
 
     public PlayerMovementHandler playerMovementHandler;
 
@@ -75,25 +75,26 @@ public class PlayerState : MonoBehaviour
 
     public void handleJumpAction()
     {
-        if (currentState == PlayerPossibleState.GROUND)
+        switch (currentState)
         {
-            changeState(PlayerPossibleState.JUMPING);
-            return;
-        }
-        if (currentState == PlayerPossibleState.SLIDING)
-        {
-            changeState(PlayerPossibleState.SLIDE_JUMPING);
-        }
-        if (currentState == PlayerPossibleState.DASHING_AFTER)
-        {
-            playerMovementHandler.handleDisableMovement();
-            playerDashAfterState.handleJumpActivation();
+            case PlayerPossibleState.GROUND:
+                changeState(PlayerPossibleState.JUMPING);
+                break;
+            case PlayerPossibleState.SLIDING:
+                changeState(PlayerPossibleState.SLIDE_JUMPING);
+                break;
+            case PlayerPossibleState.DASHING:
+                playerDashState.handleJumpActivation();
+                break;
+            case PlayerPossibleState.DASHING_AFTER:
+                playerMovementHandler.handleDisableMovement();
+                playerDashAfterState.handleJumpActivation();
+                break;
         }
     }
 
     public void handleDashAction()
     {
-        //ok
         changeState(PlayerPossibleState.DASHING);
     }
 
@@ -146,7 +147,10 @@ public class PlayerState : MonoBehaviour
                 playerDashState.stateStart(playerMovementHandler.direction);
                 break;
             case PlayerPossibleState.DASHING_AFTER:
-                playerDashAfterState.stateStart(playerMovementHandler.direction);
+                playerDashAfterState.stateStart(
+                    playerMovementHandler.direction,
+                    playerDashState.currentDashType
+                );
                 break;
             case PlayerPossibleState.SLIDING:
                 playerSlideState.stateStart();
