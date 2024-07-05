@@ -78,12 +78,12 @@ public class PlayerDashAfterState : MonoBehaviour
         totalTickCount = jumpTotalTickCount + currentTickCount;
 
         // Todo: dash needs to save the velocity tbh
-        // playerRigidbody.velocity = (
-        //     directionState == DashAfterDirection.SUPER_RIGHT
-        //         ? new Vector2(playerRigidbody.velocity.x, jumpInitialVelocity.y)
-        //         : new Vector2(-playerRigidbody.velocity.x, jumpInitialVelocity.y)
-        // );
-        playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 4);
+
+        playerRigidbody.velocity = (
+            directionState == DashAfterDirection.SUPER_RIGHT
+                ? new Vector2(jumpInitialVelocity.x, jumpInitialVelocity.y)
+                : new Vector2(-jumpInitialVelocity.x, jumpInitialVelocity.y)
+        );
 
         Debug.Log("Triggered...");
 

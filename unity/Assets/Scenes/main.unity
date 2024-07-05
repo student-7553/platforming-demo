@@ -536,8 +536,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxJumpingFixedCounter: 15
-  singleTickThrust: 65
-  jumpInitialVelocity: 80
+  singleTickThrust: 7
+  jumpInitialVelocity: 12
 --- !u!114 &1292924929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -569,7 +569,8 @@ MonoBehaviour:
   currentState: 0
   playerMovementHandler: {fileID: 0}
   isStateChangeOnCooldown: 0
-  maxYVelocity: 5
+  maxYVelocity: 30
+  minYVelocity: -5
 --- !u!114 &1292924931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,10 +625,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d18a77a2469c594697f5bb734dc089e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graceTickCount: 10
+  graceTickCount: 6
   jumpTotalTickCount: 15
-  jumpInitialVelocity: {x: 0, y: 80}
-  jumpTickThrust: {x: 14, y: 50}
+  jumpInitialVelocity: {x: 8, y: 12}
+  jumpTickThrust: {x: 5, y: 5}
 --- !u!1 &1621282042
 GameObject:
   m_ObjectHideFlags: 0

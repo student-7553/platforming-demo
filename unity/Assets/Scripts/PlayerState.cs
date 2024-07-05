@@ -43,6 +43,9 @@ public class PlayerState : MonoBehaviour
     public bool isStateChangeOnCooldown;
 
     public int maxYVelocity;
+    public int minYVelocity;
+
+    // public int maxYVelocity;
 
     void Start()
     {
@@ -83,6 +86,7 @@ public class PlayerState : MonoBehaviour
         }
         if (currentState == PlayerPossibleState.DASHING_AFTER)
         {
+            playerMovementHandler.handleDisableMovement();
             playerDashAfterState.handleJumpActivation();
         }
     }
@@ -155,13 +159,13 @@ public class PlayerState : MonoBehaviour
                 playerJumpHandler.stateEnd();
                 break;
             case PlayerPossibleState.DASHING:
+                playerMovementHandler.handleUnDisableMovement();
                 playerDashState.stateEnd();
                 break;
             case PlayerPossibleState.SLIDING:
                 playerSlideState.stateEnd();
                 break;
             case PlayerPossibleState.SLIDE_JUMPING:
-                playerMovementHandler.handleDisableMovement();
                 playerMovementHandler.handleUnDisableMovement();
                 playerSlideJumpState.stateEnd();
                 break;
@@ -195,11 +199,8 @@ public class PlayerState : MonoBehaviour
 
     private void clampVelocity()
     {
-        float clampedVelocity = Mathf.Clamp(
-            playerRigidbody.velocity.y,
-            -maxYVelocity,
-            maxYVelocity
-        );
+        float clampedVelocity = Mathf.Clamp(playerRigidbody.velocity.y, minYVelocity, maxYVelocity);
+
         playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, clampedVelocity);
     }
 }

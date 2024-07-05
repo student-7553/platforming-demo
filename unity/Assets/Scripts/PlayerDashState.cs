@@ -25,6 +25,7 @@ public class PlayerDashState : MonoBehaviour
     private Vector2 getCurrentDirectionVector()
     {
         Vector2 directionVector = Vector2.zero;
+
         if (currentDirection.x != 0)
         {
             directionVector.x = positonAddPerTick * currentDirection.x;
@@ -45,6 +46,8 @@ public class PlayerDashState : MonoBehaviour
         }
 
         Vector2 directionTick = getCurrentDirectionVector();
+
+        // Debug.Log(directionTick);
 
         Vector2 newPosition = (Vector2)gameObject.transform.position + directionTick;
 
