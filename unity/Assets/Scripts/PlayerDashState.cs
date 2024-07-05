@@ -53,7 +53,8 @@ public class PlayerDashState : MonoBehaviour
         currentTickCount++;
         if (currentTickCount > totalTickCountForDash)
         {
-            playerState.changeState(PlayerPossibleState.NONE);
+            playerState.changeState(PlayerPossibleState.DASHING_AFTER);
+            // playerState.changeState(PlayerPossibleState.NONE);
         }
     }
 

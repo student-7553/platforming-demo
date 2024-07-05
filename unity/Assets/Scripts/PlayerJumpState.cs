@@ -8,9 +8,8 @@ public class PlayerJumpState : MonoBehaviour
 
     private bool isStateActive;
 
-    private int jumpingFixedCounter = 0;
+    private int tickCounter = 0;
     public int maxJumpingFixedCounter;
-    public int toThePowerOf;
 
     public int singleTickThrust;
 
@@ -34,23 +33,24 @@ public class PlayerJumpState : MonoBehaviour
             return;
         }
 
-        if (jumpingFixedCounter == 0)
+        if (tickCounter == 0)
         {
             playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, jumpInitialVelocity);
         }
 
-        float scaled = jumpingFixedCounter / (float)maxJumpingFixedCounter;
-        float curvedPercentageThrust = Mathf.Pow(scaled, toThePowerOf);
+        // can be between 0 - 1
+        float progressScaled = tickCounter / (float)maxJumpingFixedCounter;
+        float curvedPercentageThrust = Mathf.Pow(progressScaled, 2);
 
         float thrust = singleTickThrust - (singleTickThrust * curvedPercentageThrust);
 
-        Vector2 force = Vector2.up * thrust;
+        Vector2 force = new Vector2(0, thrust);
 
         playerRigidbody.AddForce(force);
 
-        jumpingFixedCounter = jumpingFixedCounter + 1;
+        tickCounter = tickCounter + 1;
 
-        if (jumpingFixedCounter >= maxJumpingFixedCounter)
+        if (tickCounter >= maxJumpingFixedCounter)
         {
             handleJumpEnd();
         }
@@ -61,7 +61,6 @@ public class PlayerJumpState : MonoBehaviour
         isStateActive = false;
 
         playerRigidbody.velocity = Vector2.zero;
-        jumpingFixedCounter = 0;
     }
 
     public void handleJumpEnd()
@@ -72,5 +71,6 @@ public class PlayerJumpState : MonoBehaviour
     public void stateStart()
     {
         isStateActive = true;
+        tickCounter = 0;
     }
 }

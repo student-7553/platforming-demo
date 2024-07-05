@@ -11,8 +11,7 @@ public class PlayerSlideJumpState : MonoBehaviour
 
     // Set from editor
     public int maxTickCounter;
-    public Vector2 jumpDirection;
-    public float singleTickThrust;
+    public Vector2 jumpForceTick;
 
     public Vector2 jumpInitialVelocity;
 
@@ -34,25 +33,13 @@ public class PlayerSlideJumpState : MonoBehaviour
             return;
         }
 
-        if (tickCounter == 0)
-        {
-            playerRigidbody.velocity = (
-                isSlidingRight
-                    ? new Vector2(-jumpInitialVelocity.x, jumpInitialVelocity.y)
-                    : jumpInitialVelocity
-            );
-        }
-
         // can be between 0 - 1
         float progressScaled = tickCounter / (float)maxTickCounter;
-
         float curvedPercentageThrust = Mathf.Pow(progressScaled, 2);
 
-        float thrust = singleTickThrust - (singleTickThrust * curvedPercentageThrust);
+        Vector2 thrust = jumpForceTick - (jumpForceTick * curvedPercentageThrust);
 
-        Vector2 force =
-            (isSlidingRight ? new Vector2(-jumpDirection.x, jumpDirection.y) : jumpDirection)
-            * thrust;
+        Vector2 force = isSlidingRight ? new Vector2(-thrust.x, thrust.y) : thrust;
 
         playerRigidbody.AddForce(force);
 
@@ -67,9 +54,8 @@ public class PlayerSlideJumpState : MonoBehaviour
     public void stateEnd()
     {
         isStateActive = false;
-        tickCounter = 0;
 
-        // playerRigidbody.velocity = Vector2.zero;
+        // playerRigidbody.velocity = playerRigidbody.velocity / 2;
     }
 
     public void handleJumpEnd()
@@ -80,6 +66,13 @@ public class PlayerSlideJumpState : MonoBehaviour
     public void stateStart(bool _isSlidingRight)
     {
         isStateActive = true;
+        tickCounter = 0;
         isSlidingRight = _isSlidingRight;
+
+        playerRigidbody.velocity = (
+            isSlidingRight
+                ? new Vector2(-jumpInitialVelocity.x, jumpInitialVelocity.y)
+                : jumpInitialVelocity
+        );
     }
 }

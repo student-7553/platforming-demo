@@ -1,6 +1,6 @@
 using UnityEngine;
 
-enum ObservedState
+public enum ObservedState
 {
     SLIDING_LEFT,
     SLIDING_RIGHT,
@@ -16,9 +16,10 @@ public class PlayerObserver : MonoBehaviour
     private float xMargin;
 
     private PlayerState playerState;
-    public LayerMask layerMask;
 
-    private ObservedState observedState;
+    public ObservedState observedState;
+
+    public LayerMask layerMask;
 
     void Start()
     {

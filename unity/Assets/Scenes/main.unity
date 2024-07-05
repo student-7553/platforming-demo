@@ -360,6 +360,7 @@ GameObject:
   - component: {fileID: 1292924931}
   - component: {fileID: 1292924932}
   - component: {fileID: 1292924933}
+  - component: {fileID: 1292924934}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -535,9 +536,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxJumpingFixedCounter: 15
-  toThePowerOf: 2
   singleTickThrust: 65
-  jumpInitialVelocity: 4
+  jumpInitialVelocity: 80
 --- !u!114 &1292924929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,6 +550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd2c4fce5ef8be049801155015231a28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  observedState: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -608,10 +609,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac687e499e4955843a49f4110990ecea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxTickCounter: 5
-  jumpDirection: {x: 1, y: 1}
-  singleTickThrust: 35
-  jumpInitialVelocity: {x: 6, y: 3}
+  maxTickCounter: 10
+  jumpForceTick: {x: 14, y: 14}
+  jumpInitialVelocity: {x: 7, y: 7}
+--- !u!114 &1292924934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292924922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d18a77a2469c594697f5bb734dc089e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graceTickCount: 10
+  jumpTotalTickCount: 15
+  jumpInitialVelocity: {x: 0, y: 80}
+  jumpTickThrust: {x: 14, y: 50}
 --- !u!1 &1621282042
 GameObject:
   m_ObjectHideFlags: 0

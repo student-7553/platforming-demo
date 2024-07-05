@@ -8,6 +8,7 @@ public enum PlayerPossibleState
     GROUND,
     FALLING,
     DASHING,
+    DASHING_AFTER,
     JUMPING,
     SLIDING,
     SLIDE_JUMPING
@@ -20,12 +21,6 @@ public enum PlayerStateSource
     JUMP_STATE,
     INPUT,
 }
-
-// interface PlayerStateFunction
-// {
-//     public void stateStart();
-//     public void stateEnd();
-// }
 
 public class PlayerState : MonoBehaviour
 {
@@ -43,6 +38,7 @@ public class PlayerState : MonoBehaviour
     private PlayerDashState playerDashState;
     private PlayerSlideState playerSlideState;
     private PlayerSlideJumpState playerSlideJumpState;
+    private PlayerDashAfterState playerDashAfterState;
 
     public bool isStateChangeOnCooldown;
 
@@ -64,6 +60,7 @@ public class PlayerState : MonoBehaviour
         playerDashState = GetComponent<PlayerDashState>();
         playerSlideState = GetComponent<PlayerSlideState>();
         playerSlideJumpState = GetComponent<PlayerSlideJumpState>();
+        playerDashAfterState = GetComponent<PlayerDashAfterState>();
 
         currentState = PlayerPossibleState.GROUND;
     }
@@ -83,6 +80,10 @@ public class PlayerState : MonoBehaviour
         if (currentState == PlayerPossibleState.SLIDING)
         {
             changeState(PlayerPossibleState.SLIDE_JUMPING);
+        }
+        if (currentState == PlayerPossibleState.DASHING_AFTER)
+        {
+            playerDashAfterState.handleJumpActivation();
         }
     }
 
@@ -106,7 +107,6 @@ public class PlayerState : MonoBehaviour
         clampVelocity();
     }
 
-    //This needs to be handled from the states themself
     private bool isAllowedToChangeStateTo(PlayerPossibleState newState)
     {
         if (newState == currentState)
@@ -132,13 +132,17 @@ public class PlayerState : MonoBehaviour
                 playerJumpHandler.stateStart();
                 break;
             case PlayerPossibleState.SLIDE_JUMPING:
+                playerMovementHandler.handleDisableMovement();
                 playerSlideJumpState.stateStart(
                     playerMovementHandler.direction.x > 0 ? true : false
                 );
                 break;
             case PlayerPossibleState.DASHING:
-                playerDashState.stateStart(playerMovementHandler.direction);
                 playerMovementHandler.handleDisableMovement();
+                playerDashState.stateStart(playerMovementHandler.direction);
+                break;
+            case PlayerPossibleState.DASHING_AFTER:
+                playerDashAfterState.stateStart(playerMovementHandler.direction);
                 break;
             case PlayerPossibleState.SLIDING:
                 playerSlideState.stateStart();
@@ -152,13 +156,18 @@ public class PlayerState : MonoBehaviour
                 break;
             case PlayerPossibleState.DASHING:
                 playerDashState.stateEnd();
-                playerMovementHandler.handleUnDisableMovement();
                 break;
             case PlayerPossibleState.SLIDING:
                 playerSlideState.stateEnd();
                 break;
             case PlayerPossibleState.SLIDE_JUMPING:
+                playerMovementHandler.handleDisableMovement();
+                playerMovementHandler.handleUnDisableMovement();
                 playerSlideJumpState.stateEnd();
+                break;
+            case PlayerPossibleState.DASHING_AFTER:
+                playerMovementHandler.handleUnDisableMovement();
+                playerDashAfterState.stateEnd();
                 break;
         }
 
