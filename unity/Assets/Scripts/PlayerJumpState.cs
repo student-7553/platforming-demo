@@ -33,11 +33,6 @@ public class PlayerJumpState : MonoBehaviour
             return;
         }
 
-        if (tickCounter == 0)
-        {
-            playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, jumpInitialVelocity);
-        }
-
         // can be between 0 - 1
         float progressScaled = tickCounter / (float)maxJumpingFixedCounter;
         float curvedPercentageThrust = Mathf.Pow(progressScaled, 2);
@@ -72,5 +67,7 @@ public class PlayerJumpState : MonoBehaviour
     {
         isStateActive = true;
         tickCounter = 0;
+
+        playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, jumpInitialVelocity);
     }
 }

@@ -27,25 +27,20 @@ public class PlayerState : MonoBehaviour
     [SerializeField]
     public PlayerPossibleState currentState;
 
-    private Rigidbody2D playerRigidbody;
-
     public PlayerObserver playerObserver;
 
     public PlayerMovementHandler playerMovementHandler;
 
+    // ------------------STATES-------------------------------
     private PlayerJumpState playerJumpHandler;
-
     private PlayerDashState playerDashState;
     private PlayerSlideState playerSlideState;
     private PlayerSlideJumpState playerSlideJumpState;
     private PlayerDashAfterState playerDashAfterState;
 
+    // -------------------------------------------------
+
     public bool isStateChangeOnCooldown;
-
-    public int maxYVelocity;
-    public int minYVelocity;
-
-    // public int maxYVelocity;
 
     void Start()
     {
@@ -56,7 +51,6 @@ public class PlayerState : MonoBehaviour
         }
         Singelton.SetPlayerState(this);
 
-        playerRigidbody = GetComponent<Rigidbody2D>();
         playerObserver = GetComponent<PlayerObserver>();
         playerMovementHandler = GetComponent<PlayerMovementHandler>();
         playerJumpHandler = GetComponent<PlayerJumpState>();
@@ -105,11 +99,6 @@ public class PlayerState : MonoBehaviour
             return;
         }
         playerJumpHandler.handleJumpEnd();
-    }
-
-    private void FixedUpdate()
-    {
-        clampVelocity();
     }
 
     private bool isAllowedToChangeStateTo(PlayerPossibleState newState)
@@ -199,12 +188,5 @@ public class PlayerState : MonoBehaviour
         isStateChangeOnCooldown = true;
         yield return new WaitForSeconds(0.05f);
         isStateChangeOnCooldown = false;
-    }
-
-    private void clampVelocity()
-    {
-        float clampedVelocity = Mathf.Clamp(playerRigidbody.velocity.y, minYVelocity, maxYVelocity);
-
-        playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, clampedVelocity);
     }
 }

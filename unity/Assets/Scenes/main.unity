@@ -351,6 +351,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1292924923}
   - component: {fileID: 1292924924}
+  - component: {fileID: 1292924935}
   - component: {fileID: 1292924925}
   - component: {fileID: 1292924928}
   - component: {fileID: 1292924926}
@@ -361,6 +362,7 @@ GameObject:
   - component: {fileID: 1292924932}
   - component: {fileID: 1292924933}
   - component: {fileID: 1292924934}
+  - component: {fileID: 1292924936}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -567,10 +569,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
+  playerObserver: {fileID: 0}
   playerMovementHandler: {fileID: 0}
   isStateChangeOnCooldown: 0
-  maxYVelocity: 30
-  minYVelocity: -5
 --- !u!114 &1292924931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,6 +586,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalTickCountForDash: 10
   positonAddPerTick: 0.2
+  waveDashGraceTickCount: 15
+  currentDashType: 0
 --- !u!114 &1292924932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -627,6 +630,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graceTickCount: 6
   jumpTotalTickCount: 15
+  jumpInitialVelocity: {x: 8, y: 12}
+  jumpTickThrust: {x: 5, y: 5}
+--- !u!114 &1292924935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292924922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6edca0b5da65bde4a8bc5e8885e3da9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxYVelocity: 30
+  minYVelocity: -5
+--- !u!114 &1292924936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292924922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dba4c595a97dcf45a8eefd3b65873e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxTickCounter: 15
   jumpInitialVelocity: {x: 8, y: 12}
   jumpTickThrust: {x: 5, y: 5}
 --- !u!1 &1621282042

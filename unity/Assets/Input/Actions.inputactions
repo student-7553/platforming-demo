@@ -110,6 +110,17 @@
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "",
+                    "id": "7fbfb68c-4dc5-4a9b-b289-42c50df2ae0d",
+                    "path": "<Keyboard>/rightShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Player",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "2D Vector",
                     "id": "e672669d-38c9-482b-81ca-860b1729b251",
                     "path": "2DVector",

@@ -9,7 +9,6 @@ public class PlayerSlideJumpState : MonoBehaviour
     private int tickCounter = 0;
     private bool isSlidingRight;
 
-    // Set from editor
     public int maxTickCounter;
     public Vector2 jumpForceTick;
 

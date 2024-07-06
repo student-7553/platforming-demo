@@ -6,6 +6,7 @@ public enum DashAfterDirection
     SUPER_LEFT,
 }
 
+// Handles super dash and hyper dash
 public class PlayerDashAfterState : MonoBehaviour
 {
     private Rigidbody2D playerRigidbody;

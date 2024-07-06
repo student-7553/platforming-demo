@@ -5,7 +5,7 @@ public enum DASH_TYPE
     OTHERS,
     PRE_SUPERDASH_OK,
     PRE_WAVEDASH_1,
-    PRE_WAVEDASH_OK,
+    PRE_WAVEDASH_READY,
 }
 
 public class PlayerDashState : MonoBehaviour
@@ -22,9 +22,11 @@ public class PlayerDashState : MonoBehaviour
 
     private float cachedGravityScale;
 
-    private float currentTickCount;
+    private int currentTickCount;
 
+    public int waveDashGraceTickCount;
     public DASH_TYPE currentDashType;
+    private int customDashTypeTickMarker;
 
     void Start()
     {
@@ -60,7 +62,8 @@ public class PlayerDashState : MonoBehaviour
                     if (currentDashType == DASH_TYPE.PRE_WAVEDASH_1)
                     {
                         // PRE_WAVEDASH_OK
-                        currentDashType = DASH_TYPE.PRE_WAVEDASH_OK;
+                        currentDashType = DASH_TYPE.PRE_WAVEDASH_READY;
+                        customDashTypeTickMarker = currentTickCount;
                     }
 
                     if (effectiveDirection.x > 0)
@@ -92,7 +95,17 @@ public class PlayerDashState : MonoBehaviour
     }
 
     // public void
-    public void handleJumpActivation() { }
+    public void handleJumpActivation()
+    {
+        if (
+            currentDashType == DASH_TYPE.PRE_WAVEDASH_READY
+            && customDashTypeTickMarker + waveDashGraceTickCount <= currentTickCount
+        )
+        {
+            //
+            // set to wave dash
+        }
+    }
 
     //
 
