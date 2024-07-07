@@ -157,6 +157,7 @@ public class PlayerDashAfterState : MonoBehaviour
         isStateActive = true;
 
         currentTickCount = 0;
+
         totalTickCount = graceTickCount;
 
         directionState =

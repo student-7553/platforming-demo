@@ -18,6 +18,7 @@ public class PlayerObserver : MonoBehaviour
     private PlayerState playerState;
 
     public ObservedState observedState;
+    public bool isDashAvailable;
 
     public LayerMask layerMask;
 
@@ -33,7 +34,28 @@ public class PlayerObserver : MonoBehaviour
     private void FixedUpdate()
     {
         observedState = getObservedState();
+        handleDashCooldown();
         handleSelfStates();
+    }
+
+    public void handleDashCooldown()
+    {
+        if (observedState != ObservedState.GROUND)
+        {
+            return;
+        }
+
+        if (playerState.currentState == PlayerPossibleState.DASHING)
+        {
+            return;
+        }
+
+        isDashAvailable = true;
+    }
+
+    public void dashMark()
+    {
+        isDashAvailable = false;
     }
 
     private void handleSelfStates()

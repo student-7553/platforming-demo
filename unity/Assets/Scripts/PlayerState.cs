@@ -92,7 +92,11 @@ public class PlayerState : MonoBehaviour
 
     public void handleDashAction()
     {
-        // Todo cap how the dash works
+        if (!playerObserver.isDashAvailable)
+        {
+            return;
+        }
+
         changeState(PlayerPossibleState.DASHING);
     }
 
@@ -138,6 +142,7 @@ public class PlayerState : MonoBehaviour
                 break;
             case PlayerPossibleState.DASHING:
                 playerMovementHandler.handleDisableMovement();
+                playerObserver.dashMark();
                 playerDashState.stateStart(playerMovementHandler.direction);
                 break;
             case PlayerPossibleState.WAVE_DASHING:
