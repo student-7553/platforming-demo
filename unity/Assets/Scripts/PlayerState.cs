@@ -129,6 +129,32 @@ public class PlayerState : MonoBehaviour
             return false;
         }
 
+        switch (currentState)
+        {
+            case PlayerPossibleState.JUMPING:
+                playerJumpHandler.stateEnd();
+                break;
+            case PlayerPossibleState.DASHING:
+                playerMovementHandler.handleUnDisableMovement();
+                playerDashState.stateEnd();
+                break;
+            case PlayerPossibleState.WAVE_DASHING:
+                playerMovementHandler.handleUnDisableMovement();
+                playerWaveDashState.stateEnd();
+                break;
+            case PlayerPossibleState.SLIDING:
+                playerSlideState.stateEnd();
+                break;
+            case PlayerPossibleState.SLIDE_JUMPING:
+                playerMovementHandler.handleUnDisableMovement();
+                playerSlideJumpState.stateEnd();
+                break;
+            case PlayerPossibleState.DASHING_AFTER:
+                playerMovementHandler.handleUnDisableMovement();
+                playerDashAfterState.stateEnd();
+                break;
+        }
+
         switch (newState)
         {
             case PlayerPossibleState.JUMPING:
@@ -146,45 +172,21 @@ public class PlayerState : MonoBehaviour
                 playerDashState.stateStart(playerMovementHandler.direction);
                 break;
             case PlayerPossibleState.WAVE_DASHING:
-                playerWaveDashState.stateStart(playerMovementHandler.direction);
+                playerMovementHandler.handleDisableMovement();
+                playerWaveDashState.stateStart(
+                    playerMovementHandler.direction,
+                    playerDashState.cachedVelocity
+                );
                 break;
             case PlayerPossibleState.DASHING_AFTER:
                 playerDashAfterState.stateStart(
                     playerMovementHandler.direction,
-                    playerDashState.currentDashType
+                    playerDashState.currentDashType,
+                    playerDashState.cachedVelocity
                 );
                 break;
             case PlayerPossibleState.SLIDING:
                 playerSlideState.stateStart();
-                break;
-        }
-
-        switch (currentState)
-        {
-            case PlayerPossibleState.JUMPING:
-                playerJumpHandler.stateEnd();
-                break;
-            case PlayerPossibleState.DASHING:
-                if (newState != PlayerPossibleState.WAVE_DASHING)
-                {
-                    playerMovementHandler.handleUnDisableMovement();
-                }
-                playerDashState.stateEnd();
-                break;
-            case PlayerPossibleState.WAVE_DASHING:
-                playerMovementHandler.handleUnDisableMovement();
-                playerWaveDashState.stateEnd();
-                break;
-            case PlayerPossibleState.SLIDING:
-                playerSlideState.stateEnd();
-                break;
-            case PlayerPossibleState.SLIDE_JUMPING:
-                playerMovementHandler.handleUnDisableMovement();
-                playerSlideJumpState.stateEnd();
-                break;
-            case PlayerPossibleState.DASHING_AFTER:
-                playerMovementHandler.handleUnDisableMovement();
-                playerDashAfterState.stateEnd();
                 break;
         }
 

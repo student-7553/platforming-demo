@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum PlayerWaveDashDirection
@@ -20,6 +21,7 @@ public class PlayerWaveDashState : MonoBehaviour
 
     public Vector2 jumpInitialVelocity;
     public Vector2 jumpTickThrust;
+    private Vector2 cachedVelocity;
 
     void Start()
     {
@@ -35,10 +37,17 @@ public class PlayerWaveDashState : MonoBehaviour
         }
         if (currentTickCount == 0)
         {
+            Vector2 effectiveAbsoluteInitialVelocity =
+                jumpInitialVelocity
+                + new Vector2(Math.Abs(cachedVelocity.x), Math.Abs(cachedVelocity.y));
+
             playerRigidbody.velocity =
                 direction == PlayerWaveDashDirection.RIGHT
-                    ? jumpInitialVelocity
-                    : new Vector2(-jumpInitialVelocity.x, jumpInitialVelocity.y);
+                    ? effectiveAbsoluteInitialVelocity
+                    : new Vector2(
+                        -effectiveAbsoluteInitialVelocity.x,
+                        effectiveAbsoluteInitialVelocity.y
+                    );
         }
 
         // can be between 0 - 1
@@ -66,9 +75,10 @@ public class PlayerWaveDashState : MonoBehaviour
         currentTickCount = 0;
     }
 
-    public void stateStart(Vector2 _direction)
+    public void stateStart(Vector2 _direction, Vector2 _cachedVelocity)
     {
         isStateActive = true;
+        cachedVelocity = _cachedVelocity;
         direction = _direction.x > 0 ? PlayerWaveDashDirection.RIGHT : PlayerWaveDashDirection.LEFT;
     }
 }
