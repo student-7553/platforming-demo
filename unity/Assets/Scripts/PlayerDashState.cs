@@ -70,6 +70,7 @@ public class PlayerDashState : MonoBehaviour
                 {
                     if (currentDashType == DASH_TYPE.PRE_WAVEDASH_1)
                     {
+                        Debug.Log("PRE_WAVEDASH_READY.....");
                         currentDashType = DASH_TYPE.PRE_WAVEDASH_READY;
                         customDashTypeTickMarker = currentTickCount;
                     }
@@ -140,6 +141,7 @@ public class PlayerDashState : MonoBehaviour
         currentDashType = DASH_TYPE.OTHERS;
 
         playerRigidbody.gravityScale = cachedGravityScale;
+        playerRigidbody.velocity = Vector2.zero;
     }
 
     public void stateStart(Vector2 direction)
@@ -148,6 +150,9 @@ public class PlayerDashState : MonoBehaviour
         cachedGravityScale = playerRigidbody.gravityScale;
 
         playerRigidbody.gravityScale = 0;
+
+        playerRigidbody.velocity = Vector2.zero;
+
         currentDirection = direction;
 
         if (

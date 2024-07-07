@@ -538,8 +538,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxJumpingFixedCounter: 15
-  singleTickThrust: 7
-  jumpInitialVelocity: 12
+  singleTickThrust: 50
+  jumpInitialVelocity: 6
 --- !u!114 &1292924929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630,12 +630,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graceTickCount: 6
   jumpTotalTickCount: 15
-  jumpInitialVelocity: {x: 8, y: 12}
-  jumpTickThrust: {x: 5, y: 5}
   superDashJumpInitialVelocity: {x: 8, y: 12}
   superDashJumpTickThrust: {x: 5, y: 5}
-  hyperDashJumpInitialVelocity: {x: 0, y: 0}
-  hyperDashJumpTickThrust: {x: 0, y: 0}
+  hyperDashJumpInitialVelocity: {x: 14, y: 6}
+  hyperDashJumpTickThrust: {x: 5, y: 5}
 --- !u!114 &1292924935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -662,9 +660,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dba4c595a97dcf45a8eefd3b65873e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxTickCounter: 15
+  maxTickCounter: 20
   jumpInitialVelocity: {x: 8, y: 12}
-  jumpTickThrust: {x: 5, y: 5}
+  jumpTickThrust: {x: 6, y: 6}
 --- !u!1 &1621282042
 GameObject:
   m_ObjectHideFlags: 0

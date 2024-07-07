@@ -33,6 +33,13 @@ public class PlayerWaveDashState : MonoBehaviour
         {
             return;
         }
+        if (currentTickCount == 0)
+        {
+            playerRigidbody.velocity =
+                direction == PlayerWaveDashDirection.RIGHT
+                    ? jumpInitialVelocity
+                    : new Vector2(-jumpInitialVelocity.x, jumpInitialVelocity.y);
+        }
 
         // can be between 0 - 1
         float progressScaled = currentTickCount / (float)maxTickCounter;
@@ -63,10 +70,5 @@ public class PlayerWaveDashState : MonoBehaviour
     {
         isStateActive = true;
         direction = _direction.x > 0 ? PlayerWaveDashDirection.RIGHT : PlayerWaveDashDirection.LEFT;
-
-        playerRigidbody.velocity =
-            direction == PlayerWaveDashDirection.RIGHT
-                ? jumpInitialVelocity
-                : new Vector2(-jumpInitialVelocity.x, jumpInitialVelocity.y);
     }
 }

@@ -9,8 +9,8 @@ public enum DashAfterDirection
 public enum DashAfterState
 {
     NONE,
-    SUPER_DASH,
-    HYPER_DASH,
+    SUPER_DASH_JUMP,
+    HYPER_DASH_JUMP
 }
 
 // Handles super dash and hyper dash, prob better if super and hyper dash gets its own state
@@ -49,36 +49,60 @@ public class PlayerDashAfterState : MonoBehaviour
         {
             return;
         }
+
         currentTickCount = currentTickCount + 1;
-        if (dashState != DashAfterState.NONE)
+
+        if (dashState == DashAfterState.SUPER_DASH_JUMP)
         {
-            // can be between 0 - 1
-            float progressScaled = currentTickCount / (float)totalTickCount;
-            float curvedPercentageThrust = Mathf.Pow(progressScaled, 2);
-
-            Vector2 thrust =
-                superDashJumpTickThrust - (superDashJumpTickThrust * curvedPercentageThrust);
-
-            Vector2 force =
-                directionState == DashAfterDirection.SUPER_RIGHT
-                    ? new Vector2(thrust.x, thrust.y)
-                    : new Vector2(-thrust.x, thrust.y);
-
-            playerRigidbody.AddForce(force);
+            handleSuperTick();
         }
+        else if (dashState == DashAfterState.HYPER_DASH_JUMP)
+        {
+            handleHyperTick();
+        }
+
         if (currentTickCount > totalTickCount)
         {
             playerState.changeState(PlayerPossibleState.NONE);
         }
     }
 
+    private void handleSuperTick()
+    {
+        float progressScaled = currentTickCount / (float)totalTickCount;
+        float curvedPercentageThrust = Mathf.Pow(progressScaled, 2);
+
+        Vector2 thrust =
+            superDashJumpTickThrust - (superDashJumpTickThrust * curvedPercentageThrust);
+
+        Vector2 force =
+            directionState == DashAfterDirection.SUPER_RIGHT
+                ? new Vector2(thrust.x, thrust.y)
+                : new Vector2(-thrust.x, thrust.y);
+
+        playerRigidbody.AddForce(force);
+    }
+
+    private void handleHyperTick()
+    {
+        float progressScaled = currentTickCount / (float)totalTickCount;
+        float curvedPercentageThrust = Mathf.Pow(progressScaled, 2);
+
+        Vector2 thrust =
+            hyperDashJumpTickThrust - (hyperDashJumpTickThrust * curvedPercentageThrust);
+
+        Vector2 force =
+            directionState == DashAfterDirection.SUPER_RIGHT
+                ? new Vector2(thrust.x, thrust.y)
+                : new Vector2(-thrust.x, thrust.y);
+
+        playerRigidbody.AddForce(force);
+    }
+
     public void stateEnd()
     {
         isStateActive = false;
         dashState = DashAfterState.NONE;
-
-        // need to cap the velocity if lower than a certain threshold
-        // playerRigidbody.gravityScale = cachedGravityScale;
     }
 
     public void handleJumpActivation()
@@ -92,35 +116,46 @@ public class PlayerDashAfterState : MonoBehaviour
         {
             return;
         }
-        if (preDashType == DASH_TYPE.PRE_SUPERDASH_OK)
-        {
-            dashState = DashAfterState.SUPER_DASH;
-            totalTickCount = jumpTotalTickCount + currentTickCount;
 
-            playerRigidbody.velocity = (
-                directionState == DashAfterDirection.SUPER_RIGHT
-                    ? new Vector2(superDashJumpInitialVelocity.x, superDashJumpInitialVelocity.y)
-                    : new Vector2(-superDashJumpInitialVelocity.x, superDashJumpInitialVelocity.y)
-            );
-        }
-        else if (preDashType == DASH_TYPE.PRE_HYPERDASH_OK)
+        switch (preDashType)
         {
-            dashState = DashAfterState.HYPER_DASH;
-            totalTickCount = jumpTotalTickCount + currentTickCount;
-
-            // Todo
-            // playerRigidbody.velocity = (
-            //     directionState == DashAfterDirection.SUPER_RIGHT
-            //         ? new Vector2(superDashJumpInitialVelocity.x, superDashJumpInitialVelocity.y)
-            //         : new Vector2(-superDashJumpInitialVelocity.x, superDashJumpInitialVelocity.y)
-            // );
-            return;
+            case DASH_TYPE.PRE_SUPERDASH_OK:
+                dashState = DashAfterState.SUPER_DASH_JUMP;
+                totalTickCount = jumpTotalTickCount + currentTickCount;
+                playerRigidbody.velocity = (
+                    directionState == DashAfterDirection.SUPER_RIGHT
+                        ? new Vector2(
+                            superDashJumpInitialVelocity.x,
+                            superDashJumpInitialVelocity.y
+                        )
+                        : new Vector2(
+                            -superDashJumpInitialVelocity.x,
+                            superDashJumpInitialVelocity.y
+                        )
+                );
+                break;
+            case DASH_TYPE.PRE_HYPERDASH_OK:
+                dashState = DashAfterState.HYPER_DASH_JUMP;
+                totalTickCount = jumpTotalTickCount + currentTickCount;
+                playerRigidbody.velocity = (
+                    directionState == DashAfterDirection.SUPER_RIGHT
+                        ? new Vector2(
+                            hyperDashJumpInitialVelocity.x,
+                            hyperDashJumpInitialVelocity.y
+                        )
+                        : new Vector2(
+                            -hyperDashJumpInitialVelocity.x,
+                            hyperDashJumpInitialVelocity.y
+                        )
+                );
+                break;
         }
     }
 
     public void stateStart(Vector2 direction, DASH_TYPE _preDashType)
     {
         isStateActive = true;
+
         currentTickCount = 0;
         totalTickCount = graceTickCount;
 
