@@ -632,6 +632,10 @@ MonoBehaviour:
   jumpTotalTickCount: 15
   jumpInitialVelocity: {x: 8, y: 12}
   jumpTickThrust: {x: 5, y: 5}
+  superDashJumpInitialVelocity: {x: 8, y: 12}
+  superDashJumpTickThrust: {x: 5, y: 5}
+  hyperDashJumpInitialVelocity: {x: 0, y: 0}
+  hyperDashJumpTickThrust: {x: 0, y: 0}
 --- !u!114 &1292924935
 MonoBehaviour:
   m_ObjectHideFlags: 0

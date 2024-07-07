@@ -32,6 +32,12 @@ public class PlayerObserver : MonoBehaviour
 
     private void FixedUpdate()
     {
+        observedState = getObservedState();
+        handleSelfStates();
+    }
+
+    private void handleSelfStates()
+    {
         if (
             playerState.isStateChangeOnCooldown
             || (
@@ -44,8 +50,6 @@ public class PlayerObserver : MonoBehaviour
         {
             return;
         }
-
-        observedState = getObservedState();
 
         if (observedState == ObservedState.GROUND)
         {

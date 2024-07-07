@@ -3,8 +3,17 @@ using UnityEngine;
 public enum DASH_TYPE
 {
     OTHERS,
+
+    // Ready for superdash
     PRE_SUPERDASH_OK,
+
+    // Ready for hyperdash
+    PRE_HYPERDASH_OK,
+
+    // wave dash check 1
     PRE_WAVEDASH_1,
+
+    // Ready for wavedash
     PRE_WAVEDASH_READY,
 }
 
@@ -61,7 +70,6 @@ public class PlayerDashState : MonoBehaviour
                 {
                     if (currentDashType == DASH_TYPE.PRE_WAVEDASH_1)
                     {
-                        // PRE_WAVEDASH_OK
                         currentDashType = DASH_TYPE.PRE_WAVEDASH_READY;
                         customDashTypeTickMarker = currentTickCount;
                     }
@@ -94,20 +102,16 @@ public class PlayerDashState : MonoBehaviour
         return directionVector;
     }
 
-    // public void
     public void handleJumpActivation()
     {
         if (
             currentDashType == DASH_TYPE.PRE_WAVEDASH_READY
-            && customDashTypeTickMarker + waveDashGraceTickCount <= currentTickCount
+            && customDashTypeTickMarker + waveDashGraceTickCount >= currentTickCount
         )
         {
-            //
-            // set to wave dash
+            playerState.changeState(PlayerPossibleState.WAVE_DASHING);
         }
     }
-
-    //
 
     private void FixedUpdate()
     {
@@ -153,6 +157,14 @@ public class PlayerDashState : MonoBehaviour
         )
         {
             currentDashType = DASH_TYPE.PRE_SUPERDASH_OK;
+        }
+        else if (
+            playerState.playerObserver.observedState == ObservedState.GROUND
+            && currentDirection.x != 0
+            && currentDirection.y < 0
+        )
+        {
+            currentDashType = DASH_TYPE.PRE_HYPERDASH_OK;
         }
         else if (currentDirection.x != 0 && currentDirection.y < 0)
         {

@@ -9,6 +9,7 @@ public enum PlayerPossibleState
     FALLING,
     DASHING,
     DASHING_AFTER,
+    WAVE_DASHING,
     JUMPING,
     SLIDING,
     SLIDE_JUMPING
@@ -37,6 +38,7 @@ public class PlayerState : MonoBehaviour
     private PlayerSlideState playerSlideState;
     private PlayerSlideJumpState playerSlideJumpState;
     private PlayerDashAfterState playerDashAfterState;
+    private PlayerWaveDashState playerWaveDashState;
 
     // -------------------------------------------------
 
@@ -58,6 +60,7 @@ public class PlayerState : MonoBehaviour
         playerSlideState = GetComponent<PlayerSlideState>();
         playerSlideJumpState = GetComponent<PlayerSlideJumpState>();
         playerDashAfterState = GetComponent<PlayerDashAfterState>();
+        playerWaveDashState = GetComponent<PlayerWaveDashState>();
 
         currentState = PlayerPossibleState.GROUND;
     }
@@ -89,6 +92,7 @@ public class PlayerState : MonoBehaviour
 
     public void handleDashAction()
     {
+        // Todo cap how the dash works
         changeState(PlayerPossibleState.DASHING);
     }
 
@@ -135,6 +139,9 @@ public class PlayerState : MonoBehaviour
                 playerMovementHandler.handleDisableMovement();
                 playerDashState.stateStart(playerMovementHandler.direction);
                 break;
+            case PlayerPossibleState.WAVE_DASHING:
+                playerWaveDashState.stateStart(playerMovementHandler.direction);
+                break;
             case PlayerPossibleState.DASHING_AFTER:
                 playerDashAfterState.stateStart(
                     playerMovementHandler.direction,
@@ -152,8 +159,15 @@ public class PlayerState : MonoBehaviour
                 playerJumpHandler.stateEnd();
                 break;
             case PlayerPossibleState.DASHING:
-                playerMovementHandler.handleUnDisableMovement();
+                if (newState != PlayerPossibleState.WAVE_DASHING)
+                {
+                    playerMovementHandler.handleUnDisableMovement();
+                }
                 playerDashState.stateEnd();
+                break;
+            case PlayerPossibleState.WAVE_DASHING:
+                playerMovementHandler.handleUnDisableMovement();
+                playerWaveDashState.stateEnd();
                 break;
             case PlayerPossibleState.SLIDING:
                 playerSlideState.stateEnd();
