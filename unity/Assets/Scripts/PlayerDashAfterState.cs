@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum DashAfterDirection
@@ -118,35 +119,48 @@ public class PlayerDashAfterState : MonoBehaviour
             return;
         }
 
+        Vector2 effectiveAbsoluteInitialVelocity = new Vector2(
+            Math.Abs(cachedVelocity.x),
+            Math.Abs(cachedVelocity.y)
+        );
+
         switch (preDashType)
         {
             case DASH_TYPE.PRE_SUPERDASH_OK:
                 dashState = DashAfterState.SUPER_DASH_JUMP;
                 totalTickCount = jumpTotalTickCount + currentTickCount;
+
+                effectiveAbsoluteInitialVelocity =
+                    effectiveAbsoluteInitialVelocity + superDashJumpInitialVelocity;
+
                 playerRigidbody.velocity = (
                     directionState == DashAfterDirection.SUPER_RIGHT
                         ? new Vector2(
-                            superDashJumpInitialVelocity.x,
-                            superDashJumpInitialVelocity.y
+                            effectiveAbsoluteInitialVelocity.x,
+                            effectiveAbsoluteInitialVelocity.y
                         )
                         : new Vector2(
-                            -superDashJumpInitialVelocity.x,
-                            superDashJumpInitialVelocity.y
+                            -effectiveAbsoluteInitialVelocity.x,
+                            effectiveAbsoluteInitialVelocity.y
                         )
                 );
                 break;
             case DASH_TYPE.PRE_HYPERDASH_OK:
                 dashState = DashAfterState.HYPER_DASH_JUMP;
                 totalTickCount = jumpTotalTickCount + currentTickCount;
+
+                effectiveAbsoluteInitialVelocity =
+                    effectiveAbsoluteInitialVelocity + hyperDashJumpInitialVelocity;
+
                 playerRigidbody.velocity = (
                     directionState == DashAfterDirection.SUPER_RIGHT
                         ? new Vector2(
-                            hyperDashJumpInitialVelocity.x,
-                            hyperDashJumpInitialVelocity.y
+                            effectiveAbsoluteInitialVelocity.x,
+                            effectiveAbsoluteInitialVelocity.y
                         )
                         : new Vector2(
-                            -hyperDashJumpInitialVelocity.x,
-                            hyperDashJumpInitialVelocity.y
+                            -effectiveAbsoluteInitialVelocity.x,
+                            effectiveAbsoluteInitialVelocity.y
                         )
                 );
                 break;
