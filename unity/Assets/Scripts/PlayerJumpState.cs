@@ -1,5 +1,12 @@
 using UnityEngine;
 
+public enum PlayerJumpDirection
+{
+    RIGHT,
+    LEFT,
+    STILL
+}
+
 public class PlayerJumpState : MonoBehaviour
 {
     private Rigidbody2D playerRigidbody;
@@ -13,7 +20,8 @@ public class PlayerJumpState : MonoBehaviour
 
     public int singleTickThrust;
 
-    public int jumpInitialVelocity;
+    private PlayerJumpDirection direction;
+    public Vector2 jumpInitialVelocity;
 
     void Start()
     {
@@ -35,7 +43,17 @@ public class PlayerJumpState : MonoBehaviour
 
         if (tickCounter == 0)
         {
-            playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, jumpInitialVelocity);
+            Vector2 effectiveJumpInitialVelocity = jumpInitialVelocity;
+            if (direction == PlayerJumpDirection.STILL)
+            {
+                effectiveJumpInitialVelocity.x = 0;
+            }
+            else if (direction == PlayerJumpDirection.LEFT)
+            {
+                effectiveJumpInitialVelocity.x = -effectiveJumpInitialVelocity.x;
+            }
+
+            playerRigidbody.velocity = effectiveJumpInitialVelocity;
         }
 
         // can be between 0 - 1
@@ -66,9 +84,22 @@ public class PlayerJumpState : MonoBehaviour
         playerState.changeState(PlayerPossibleState.NONE);
     }
 
-    public void stateStart()
+    public void stateStart(Vector2 _direction)
     {
         isStateActive = true;
         tickCounter = 0;
+
+        if (_direction.x == 0)
+        {
+            direction = PlayerJumpDirection.STILL;
+        }
+        else if (_direction.x > 0)
+        {
+            direction = PlayerJumpDirection.RIGHT;
+        }
+        else
+        {
+            direction = PlayerJumpDirection.LEFT;
+        }
     }
 }

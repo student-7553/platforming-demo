@@ -168,7 +168,7 @@ public class PlayerState : MonoBehaviour
         switch (newState)
         {
             case PlayerPossibleState.JUMPING:
-                playerJumpHandler.stateStart();
+                playerJumpHandler.stateStart(playerMovementHandler.direction);
                 break;
             case PlayerPossibleState.SLIDE_JUMPING:
                 playerMovementHandler.handleDisableMovement();
