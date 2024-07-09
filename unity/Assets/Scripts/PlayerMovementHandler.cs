@@ -17,11 +17,18 @@ public struct FlowXDetail
     public float xTickDirectionMultiple;
 }
 
+public enum LookingDirection
+{
+    LEFT,
+    RIGHT,
+}
+
 public class PlayerMovementHandler : MonoBehaviour
 {
     private Rigidbody2D playerRigidbody;
 
     public Vector2 direction;
+    public LookingDirection lookingDirection;
 
     private bool isDisabled;
 
@@ -75,7 +82,12 @@ public class PlayerMovementHandler : MonoBehaviour
             flowXDetail.xFlowDirection = direction.x;
             flowXDetail.xFlowCounter = 0;
         }
+
         direction = directionInput;
+        if (direction.x != 0)
+        {
+            lookingDirection = direction.x > 0 ? LookingDirection.RIGHT : LookingDirection.LEFT;
+        }
     }
 
     public void handleDisableMovement()

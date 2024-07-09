@@ -146,13 +146,13 @@ public class PlayerDashState : MonoBehaviour
     public void stateStart(Vector2 direction)
     {
         isStateActive = true;
+        currentDirection = direction;
+
         cachedGravityScale = playerRigidbody.gravityScale;
 
         playerRigidbody.gravityScale = 0;
 
         playerRigidbody.velocity = Vector2.zero;
-
-        currentDirection = direction;
 
         if (
             currentDirection.x != 0

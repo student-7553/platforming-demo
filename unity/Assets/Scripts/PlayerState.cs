@@ -179,7 +179,17 @@ public class PlayerState : MonoBehaviour
             case PlayerPossibleState.DASHING:
                 playerMovementHandler.handleDisableMovement();
                 playerObserver.dashMark();
-                playerDashState.stateStart(playerMovementHandler.direction);
+
+                Vector2 dashDirection = playerMovementHandler.direction;
+                if (dashDirection == Vector2.zero)
+                {
+                    dashDirection =
+                        playerMovementHandler.lookingDirection == LookingDirection.LEFT
+                            ? Vector2.left
+                            : Vector2.right;
+                }
+
+                playerDashState.stateStart(dashDirection);
                 break;
             case PlayerPossibleState.WAVE_DASHING:
                 playerMovementHandler.handleDisableMovement();
