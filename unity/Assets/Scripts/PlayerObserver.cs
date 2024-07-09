@@ -2,8 +2,8 @@ using UnityEngine;
 
 public enum ObservedState
 {
-    SLIDING_LEFT,
-    SLIDING_RIGHT,
+    NEAR_LEFT_WALL,
+    NEAR_RIGHT_WALL,
     GROUND,
     AIR
 }
@@ -79,7 +79,7 @@ public class PlayerObserver : MonoBehaviour
             return;
         }
         if (
-            observedState == ObservedState.SLIDING_LEFT
+            observedState == ObservedState.NEAR_LEFT_WALL
             && playerState.playerMovementHandler.direction.x < 0
         )
         {
@@ -87,7 +87,7 @@ public class PlayerObserver : MonoBehaviour
             return;
         }
         if (
-            observedState == ObservedState.SLIDING_RIGHT
+            observedState == ObservedState.NEAR_RIGHT_WALL
             && playerState.playerMovementHandler.direction.x > 0
         )
         {
@@ -108,12 +108,12 @@ public class PlayerObserver : MonoBehaviour
         bool isSlidingLeft = computeIsSlidingLeft();
         if (isSlidingLeft)
         {
-            return ObservedState.SLIDING_LEFT;
+            return ObservedState.NEAR_LEFT_WALL;
         }
         bool isSlidingRight = computeIsSlidingRight();
         if (isSlidingRight)
         {
-            return ObservedState.SLIDING_RIGHT;
+            return ObservedState.NEAR_RIGHT_WALL;
         }
 
         return ObservedState.AIR;

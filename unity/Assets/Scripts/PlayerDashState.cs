@@ -48,8 +48,8 @@ public class PlayerDashState : MonoBehaviour
 
         switch (playerState.playerObserver.observedState)
         {
-            case ObservedState.SLIDING_LEFT:
-            case ObservedState.SLIDING_RIGHT:
+            case ObservedState.NEAR_LEFT_WALL:
+            case ObservedState.NEAR_RIGHT_WALL:
 
                 if (effectiveDirection.x != 0 && effectiveDirection.y != 0)
                 {
