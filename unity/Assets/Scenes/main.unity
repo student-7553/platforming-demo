@@ -363,6 +363,8 @@ GameObject:
   - component: {fileID: 1292924933}
   - component: {fileID: 1292924934}
   - component: {fileID: 1292924936}
+  - component: {fileID: 1292924937}
+  - component: {fileID: 1292924938}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -631,12 +633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d18a77a2469c594697f5bb734dc089e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graceTickCount: 6
-  jumpTotalTickCount: 15
-  superDashJumpInitialVelocity: {x: 9, y: 8}
-  superDashJumpTickThrust: {x: 5, y: 5}
-  hyperDashJumpInitialVelocity: {x: 14, y: 6}
-  hyperDashJumpTickThrust: {x: 5, y: 5}
+  totalTickCount: 6
 --- !u!114 &1292924935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -666,6 +663,36 @@ MonoBehaviour:
   maxTickCounter: 20
   jumpInitialVelocity: {x: 8, y: 12}
   jumpTickThrust: {x: 6, y: 6}
+--- !u!114 &1292924937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292924922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d12c2a913005324eb0d502eb625a8a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalTickCount: 15
+  superDashJumpInitialVelocity: {x: 9, y: 8}
+  superDashJumpTickThrust: {x: 5, y: 5}
+--- !u!114 &1292924938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292924922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569e5e96d23d8e84fbaa2a1f37201a13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalTickCount: 15
+  hyperDashJumpInitialVelocity: {x: 14, y: 6}
+  hyperDashJumpTickThrust: {x: 5, y: 5}
 --- !u!1 &1621282042
 GameObject:
   m_ObjectHideFlags: 0
