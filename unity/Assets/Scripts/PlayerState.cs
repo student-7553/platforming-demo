@@ -9,7 +9,7 @@ public enum PlayerPossibleState
     FALLING,
     DASHING,
     DASHING_AFTER,
-    WAVE_DASHING,
+    WAVE_DASH_JUMP,
     SUPER_DASH_JUMP,
     HYPER_DASH_JUMP,
     JUMPING,
@@ -40,7 +40,7 @@ public class PlayerState : MonoBehaviour
     private PlayerSlideState playerSlideState;
     private PlayerSlideJumpState playerSlideJumpState;
     private PlayerDashAfterState playerDashAfterState;
-    private PlayerWaveDashState playerWaveDashState;
+    private PlayerWaveJumpState playerWaveJumpState;
     private PlayerSuperJumpState playerSuperJumpState;
     private PlayerHyperJumpState playerHyperJumpState;
 
@@ -64,7 +64,7 @@ public class PlayerState : MonoBehaviour
         playerSlideState = GetComponent<PlayerSlideState>();
         playerSlideJumpState = GetComponent<PlayerSlideJumpState>();
         playerDashAfterState = GetComponent<PlayerDashAfterState>();
-        playerWaveDashState = GetComponent<PlayerWaveDashState>();
+        playerWaveJumpState = GetComponent<PlayerWaveJumpState>();
         playerSuperJumpState = GetComponent<PlayerSuperJumpState>();
         playerHyperJumpState = GetComponent<PlayerHyperJumpState>();
 
@@ -153,9 +153,9 @@ public class PlayerState : MonoBehaviour
                 playerMovementHandler.handleUnDisableMovement();
                 playerDashState.stateEnd();
                 break;
-            case PlayerPossibleState.WAVE_DASHING:
+            case PlayerPossibleState.WAVE_DASH_JUMP:
                 playerMovementHandler.handleUnDisableMovement();
-                playerWaveDashState.stateEnd();
+                playerWaveJumpState.stateEnd();
                 break;
             case PlayerPossibleState.SUPER_DASH_JUMP:
                 playerMovementHandler.handleUnDisableMovement();
@@ -204,9 +204,9 @@ public class PlayerState : MonoBehaviour
 
                 playerDashState.stateStart(dashDirection);
                 break;
-            case PlayerPossibleState.WAVE_DASHING:
+            case PlayerPossibleState.WAVE_DASH_JUMP:
                 playerMovementHandler.handleDisableMovement();
-                playerWaveDashState.stateStart(
+                playerWaveJumpState.stateStart(
                     playerMovementHandler.direction,
                     playerDashState.cachedVelocity
                 );

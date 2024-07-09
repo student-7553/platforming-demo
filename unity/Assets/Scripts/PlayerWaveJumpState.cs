@@ -1,19 +1,19 @@
 using System;
 using UnityEngine;
 
-public enum PlayerWaveDashDirection
+public enum PlayerWaveJumpDirection
 {
     RIGHT,
     LEFT,
 }
 
-public class PlayerWaveDashState : MonoBehaviour
+public class PlayerWaveJumpState : MonoBehaviour
 {
     private Rigidbody2D playerRigidbody;
     private PlayerState playerState;
 
     private bool isStateActive;
-    private PlayerWaveDashDirection direction;
+    private PlayerWaveJumpDirection direction;
 
     private int currentTickCount;
 
@@ -42,7 +42,7 @@ public class PlayerWaveDashState : MonoBehaviour
                 + new Vector2(Math.Abs(cachedVelocity.x), Math.Abs(cachedVelocity.y));
 
             playerRigidbody.velocity =
-                direction == PlayerWaveDashDirection.RIGHT
+                direction == PlayerWaveJumpDirection.RIGHT
                     ? effectiveAbsoluteInitialVelocity
                     : new Vector2(
                         -effectiveAbsoluteInitialVelocity.x,
@@ -57,7 +57,7 @@ public class PlayerWaveDashState : MonoBehaviour
         Vector2 thrust = jumpTickThrust - (jumpTickThrust * curvedPercentageThrust);
 
         Vector2 force =
-            direction == PlayerWaveDashDirection.RIGHT ? thrust : new Vector2(-thrust.x, thrust.y);
+            direction == PlayerWaveJumpDirection.RIGHT ? thrust : new Vector2(-thrust.x, thrust.y);
 
         playerRigidbody.AddForce(force);
 
@@ -79,6 +79,6 @@ public class PlayerWaveDashState : MonoBehaviour
     {
         isStateActive = true;
         cachedVelocity = _cachedVelocity;
-        direction = _direction.x > 0 ? PlayerWaveDashDirection.RIGHT : PlayerWaveDashDirection.LEFT;
+        direction = _direction.x > 0 ? PlayerWaveJumpDirection.RIGHT : PlayerWaveJumpDirection.LEFT;
     }
 }

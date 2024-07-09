@@ -108,7 +108,7 @@ public class PlayerDashState : MonoBehaviour
             && customDashTypeTickMarker + waveDashGraceTickCount >= currentTickCount
         )
         {
-            playerState.changeState(PlayerPossibleState.WAVE_DASHING);
+            playerState.changeState(PlayerPossibleState.WAVE_DASH_JUMP);
         }
     }
 
