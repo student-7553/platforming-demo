@@ -29,11 +29,11 @@ public class PlayerDashState : MonoBehaviour
     public Vector2 cachedVelocity;
 
     private int currentTickCount;
-    private int customDashTypeTickMarker;
 
     public int totalTickCountForDash;
     public float positonAddPerTick;
-    public int waveDashGraceTickCount;
+
+    // public int waveDashGraceTickCount;
     public DASH_TYPE currentDashType;
 
     void Start()
@@ -70,7 +70,6 @@ public class PlayerDashState : MonoBehaviour
                     if (currentDashType == DASH_TYPE.PRE_WAVEDASH_1)
                     {
                         currentDashType = DASH_TYPE.PRE_WAVEDASH_READY;
-                        customDashTypeTickMarker = currentTickCount;
                     }
 
                     if (effectiveDirection.x > 0)
@@ -103,13 +102,25 @@ public class PlayerDashState : MonoBehaviour
 
     public void handleJumpActivation()
     {
-        if (
-            currentDashType == DASH_TYPE.PRE_WAVEDASH_READY
-            && customDashTypeTickMarker + waveDashGraceTickCount >= currentTickCount
-        )
+        if (currentDashType == DASH_TYPE.PRE_WAVEDASH_READY)
         {
             playerState.changeState(PlayerPossibleState.WAVE_DASH_JUMP);
         }
+        else if (currentDashType == DASH_TYPE.PRE_HYPERDASH_OK)
+        {
+            playerState.changeState(PlayerPossibleState.HYPER_DASH_JUMP);
+        }
+        else if (currentDashType == DASH_TYPE.PRE_SUPERDASH_OK)
+        {
+            playerState.changeState(PlayerPossibleState.SUPER_DASH_JUMP);
+        }
+
+        // if (currentDashType == DASH_TYPE.PRE_WAVEDASH_READY
+        // // && customDashTypeTickMarker + waveDashGraceTickCount >= currentTickCount
+        // )
+        // {
+        //     playerState.changeState(PlayerPossibleState.WAVE_DASH_JUMP);
+        // }
     }
 
     private void FixedUpdate()

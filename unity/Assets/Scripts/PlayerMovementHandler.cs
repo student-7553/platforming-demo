@@ -7,9 +7,6 @@ public struct FlowXDetail
     [NonSerialized]
     public int xFlowCounter;
 
-    [NonSerialized]
-    public float xFlowDirection;
-
     [Tooltip("Speed ramp linear (Higher means slower speed ramp)")]
     public int xMaxFlowCounter;
 
@@ -54,14 +51,29 @@ public class PlayerMovementHandler : MonoBehaviour
 
         Vector2 xTickDir = xTickDirection();
 
-        Vector2 targetPosition = xTickDir + (Vector2)playerRigidbody.transform.position;
-        playerRigidbody.transform.position = targetPosition;
+        // Vector2 targetPosition = xTickDir + (Vector2)playerRigidbody.transform.position;
+        // playerRigidbody.transform.position = targetPosition;
+        // playerRigidbody.MovePosition(targetPosition);
+
+        // What should I do
+        // Initialization boost
+        // or do a ramping down tick forces?
+
+
+        // How will this interact with wall jump
+
+        // Maybe when we switch direction we also flip the velocity
+
+
+        // Todo fix this
+        // Debug.Log(xTickDir);
+        playerRigidbody.AddForce(xTickDir);
     }
 
     private Vector2 xTickDirection()
     {
         float clampedMultiplier = Mathf.Clamp(
-            (float)flowXDetail.xFlowCounter / flowXDetail.xMaxFlowCounter,
+            1f - ((float)flowXDetail.xFlowCounter / flowXDetail.xMaxFlowCounter),
             0,
             1
         );
@@ -77,9 +89,17 @@ public class PlayerMovementHandler : MonoBehaviour
 
     public void handlePlayerDirectionInput(Vector2 directionInput)
     {
-        if (flowXDetail.xFlowDirection != direction.x)
+        // 3 stages: 0, -1, 1
+        if (direction.x == 0 && directionInput.x != 0)
         {
-            flowXDetail.xFlowDirection = direction.x;
+            flowXDetail.xFlowCounter = 0;
+        }
+        else if (direction.x > 0 && directionInput.x <= 0)
+        {
+            flowXDetail.xFlowCounter = 0;
+        }
+        else if (direction.x < 0 && directionInput.x >= 0)
+        {
             flowXDetail.xFlowCounter = 0;
         }
 

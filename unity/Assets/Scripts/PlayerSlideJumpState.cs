@@ -34,9 +34,9 @@ public class PlayerSlideJumpState : MonoBehaviour
 
         // can be between 0 - 1
         float progressScaled = tickCounter / (float)maxTickCounter;
-        float curvedPercentageThrust = Mathf.Pow(progressScaled, 2);
+        // float curvedPercentageThrust = Mathf.Pow(progressScaled, 2);
 
-        Vector2 thrust = jumpForceTick - (jumpForceTick * curvedPercentageThrust);
+        Vector2 thrust = jumpForceTick - (jumpForceTick * progressScaled);
 
         Vector2 force = isSlidingRight ? new Vector2(-thrust.x, thrust.y) : thrust;
 
