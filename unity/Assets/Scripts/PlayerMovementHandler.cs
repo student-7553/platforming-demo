@@ -27,6 +27,8 @@ public class PlayerMovementHandler : MonoBehaviour
     public Vector2 direction;
     public LookingDirection lookingDirection;
 
+    public int velocityLimit;
+
     private bool isDisabled;
 
     [SerializeField]
@@ -51,36 +53,22 @@ public class PlayerMovementHandler : MonoBehaviour
 
         Vector2 xTickDir = xTickDirection();
 
-        // Vector2 targetPosition = xTickDir + (Vector2)playerRigidbody.transform.position;
-        // playerRigidbody.transform.position = targetPosition;
-        // playerRigidbody.MovePosition(targetPosition);
+        Vector2 newVelocity = playerRigidbody.velocity + xTickDir;
 
-        // What should I do
-        // Initialization boost
-        // or do a ramping down tick forces?
+        newVelocity.x = Mathf.Clamp(
+            newVelocity.x,
+            Math.Min(-velocityLimit, playerRigidbody.velocity.x),
+            Math.Max(velocityLimit, playerRigidbody.velocity.x)
+        );
 
+        playerRigidbody.velocity = newVelocity;
 
-        // How will this interact with wall jump
-
-        // Maybe when we switch direction we also flip the velocity
-
-
-        // Todo fix this
-        // Debug.Log(xTickDir);
-        playerRigidbody.AddForce(xTickDir);
+        flowXDetail.xFlowCounter = flowXDetail.xFlowCounter + 1;
     }
 
     private Vector2 xTickDirection()
     {
-        float clampedMultiplier = Mathf.Clamp(
-            1f - ((float)flowXDetail.xFlowCounter / flowXDetail.xMaxFlowCounter),
-            0,
-            1
-        );
-
-        float xDirection = (direction.x > 0 ? 1 : -1) * clampedMultiplier;
-
-        flowXDetail.xFlowCounter = flowXDetail.xFlowCounter + 1;
+        float xDirection = direction.x > 0 ? 1 : -1;
 
         Vector2 targetPosition = new Vector2(xDirection * flowXDetail.xTickDirectionMultiple, 0);
 
@@ -89,7 +77,6 @@ public class PlayerMovementHandler : MonoBehaviour
 
     public void handlePlayerDirectionInput(Vector2 directionInput)
     {
-        // 3 stages: 0, -1, 1
         if (direction.x == 0 && directionInput.x != 0)
         {
             flowXDetail.xFlowCounter = 0;
@@ -104,6 +91,7 @@ public class PlayerMovementHandler : MonoBehaviour
         }
 
         direction = directionInput;
+
         if (direction.x != 0)
         {
             lookingDirection = direction.x > 0 ? LookingDirection.RIGHT : LookingDirection.LEFT;

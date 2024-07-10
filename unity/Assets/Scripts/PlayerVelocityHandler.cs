@@ -18,8 +18,12 @@ public class PlayerVelocityHandler : MonoBehaviour
 
     private void clampVelocity()
     {
-        float clampedVelocity = Mathf.Clamp(playerRigidbody.velocity.y, minYVelocity, maxYVelocity);
+        float clampedYVelocity = Mathf.Clamp(
+            playerRigidbody.velocity.y,
+            minYVelocity,
+            maxYVelocity
+        );
 
-        playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, clampedVelocity);
+        playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, clampedYVelocity);
     }
 }

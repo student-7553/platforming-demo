@@ -453,9 +453,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0}
   lookingDirection: 0
+  velocityLimit: 4
   flowXDetail:
     xMaxFlowCounter: 7
-    xTickDirectionMultiple: 20
+    xTickDirectionMultiple: 1
 --- !u!61 &1292924926
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -591,7 +592,6 @@ MonoBehaviour:
   cachedVelocity: {x: 0, y: 0}
   totalTickCountForDash: 10
   positonAddPerTick: 0.2
-  waveDashGraceTickCount: 15
   currentDashType: 0
 --- !u!114 &1292924932
 MonoBehaviour:
@@ -675,7 +675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d12c2a913005324eb0d502eb625a8a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalTickCount: 15
+  totalTickCount: 5
   superDashJumpInitialVelocity: {x: 9, y: 8}
   superDashJumpTickThrust: {x: 5, y: 5}
 --- !u!114 &1292924938
