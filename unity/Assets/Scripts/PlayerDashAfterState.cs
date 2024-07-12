@@ -57,10 +57,20 @@ public class PlayerDashAfterState : MonoBehaviour
         switch (preDashType)
         {
             case DASH_TYPE.PRE_SUPERDASH_OK:
-                playerState.changeState(PlayerPossibleState.SUPER_DASH_JUMP);
+                if (
+                    playerState.playerObserver.observedState == ObservedState.GROUND
+                    || playerState.playerObserver.observedState == ObservedState.NEAR_LEFT_WALL
+                    || playerState.playerObserver.observedState == ObservedState.NEAR_RIGHT_WALL
+                )
+                {
+                    playerState.changeState(PlayerPossibleState.SUPER_DASH_JUMP);
+                }
                 break;
             case DASH_TYPE.PRE_HYPERDASH_OK:
-                playerState.changeState(PlayerPossibleState.HYPER_DASH_JUMP);
+                if (playerState.playerObserver.observedState == ObservedState.GROUND)
+                {
+                    playerState.changeState(PlayerPossibleState.HYPER_DASH_JUMP);
+                }
                 break;
         }
     }
@@ -68,9 +78,7 @@ public class PlayerDashAfterState : MonoBehaviour
     public void stateStart(DASH_TYPE _preDashType)
     {
         isStateActive = true;
-
         currentTickCount = 0;
-
         preDashType = _preDashType;
     }
 }

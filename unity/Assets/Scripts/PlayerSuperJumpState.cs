@@ -3,8 +3,10 @@ using UnityEngine;
 
 public enum PlayerSuperJumpDirection
 {
-    RIGHT,
-    LEFT,
+    JUMP_RIGHT,
+    JUMP_LEFT,
+    WALL_JUMP_LEFT,
+    WALL_JUMP_RIGHT,
 }
 
 public class PlayerSuperJumpState : MonoBehaviour
@@ -23,6 +25,9 @@ public class PlayerSuperJumpState : MonoBehaviour
 
     public Vector2 superDashJumpInitialVelocity;
     public Vector2 superDashJumpTickThrust;
+
+    public Vector2 superDashWallJumpInitialVelocity;
+    public Vector2 superDashWallJumpTickThrust;
 
     void Start()
     {
@@ -52,13 +57,35 @@ public class PlayerSuperJumpState : MonoBehaviour
         float progressScaled = currentTickCount / (float)totalTickCount;
         float curvedPercentageThrust = Mathf.Pow(progressScaled, 2);
 
-        Vector2 thrust =
-            superDashJumpTickThrust - (superDashJumpTickThrust * curvedPercentageThrust);
+        Vector2 force = Vector2.zero;
 
-        Vector2 force =
-            directionState == PlayerSuperJumpDirection.RIGHT
-                ? new Vector2(thrust.x, thrust.y)
-                : new Vector2(-thrust.x, thrust.y);
+        if (
+            directionState == PlayerSuperJumpDirection.JUMP_RIGHT
+            || directionState == PlayerSuperJumpDirection.JUMP_LEFT
+        )
+        {
+            Vector2 thrust =
+                superDashJumpTickThrust - (superDashJumpTickThrust * curvedPercentageThrust);
+
+            force =
+                directionState == PlayerSuperJumpDirection.JUMP_RIGHT
+                    ? new Vector2(thrust.x, thrust.y)
+                    : new Vector2(-thrust.x, thrust.y);
+        }
+        else if (
+            directionState == PlayerSuperJumpDirection.WALL_JUMP_LEFT
+            || directionState == PlayerSuperJumpDirection.WALL_JUMP_RIGHT
+        )
+        {
+            Vector2 thrust =
+                superDashWallJumpTickThrust
+                - (superDashWallJumpTickThrust * curvedPercentageThrust);
+
+            force =
+                directionState == PlayerSuperJumpDirection.JUMP_RIGHT
+                    ? new Vector2(thrust.x, thrust.y)
+                    : new Vector2(-thrust.x, thrust.y);
+        }
 
         playerRigidbody.AddForce(force);
     }
@@ -75,20 +102,47 @@ public class PlayerSuperJumpState : MonoBehaviour
             Math.Abs(cachedVelocity.y)
         );
 
-        effectiveAbsoluteInitialVelocity =
-            effectiveAbsoluteInitialVelocity + superDashJumpInitialVelocity;
+        if (
+            directionState == PlayerSuperJumpDirection.JUMP_RIGHT
+            || directionState == PlayerSuperJumpDirection.JUMP_LEFT
+        )
+        {
+            effectiveAbsoluteInitialVelocity =
+                effectiveAbsoluteInitialVelocity + superDashJumpInitialVelocity;
+            playerRigidbody.velocity = (
+                directionState == PlayerSuperJumpDirection.JUMP_RIGHT
+                    ? new Vector2(
+                        effectiveAbsoluteInitialVelocity.x,
+                        effectiveAbsoluteInitialVelocity.y
+                    )
+                    : new Vector2(
+                        -effectiveAbsoluteInitialVelocity.x,
+                        effectiveAbsoluteInitialVelocity.y
+                    )
+            );
+            return;
+        }
+        else if (
+            directionState == PlayerSuperJumpDirection.WALL_JUMP_LEFT
+            || directionState == PlayerSuperJumpDirection.WALL_JUMP_RIGHT
+        )
+        {
+            effectiveAbsoluteInitialVelocity =
+                effectiveAbsoluteInitialVelocity + superDashWallJumpInitialVelocity;
 
-        playerRigidbody.velocity = (
-            directionState == PlayerSuperJumpDirection.RIGHT
-                ? new Vector2(
-                    effectiveAbsoluteInitialVelocity.x,
-                    effectiveAbsoluteInitialVelocity.y
-                )
-                : new Vector2(
-                    -effectiveAbsoluteInitialVelocity.x,
-                    effectiveAbsoluteInitialVelocity.y
-                )
-        );
+            playerRigidbody.velocity = (
+                directionState == PlayerSuperJumpDirection.WALL_JUMP_RIGHT
+                    ? new Vector2(
+                        effectiveAbsoluteInitialVelocity.x,
+                        effectiveAbsoluteInitialVelocity.y
+                    )
+                    : new Vector2(
+                        -effectiveAbsoluteInitialVelocity.x,
+                        effectiveAbsoluteInitialVelocity.y
+                    )
+            );
+            return;
+        }
     }
 
     public void stateStart(Vector2 direction, Vector2 _cachedVelocity)
@@ -99,9 +153,24 @@ public class PlayerSuperJumpState : MonoBehaviour
 
         cachedVelocity = _cachedVelocity;
 
-        directionState =
-            direction.x > 0 ? PlayerSuperJumpDirection.RIGHT : PlayerSuperJumpDirection.LEFT;
+        directionState = getInnerDirection(direction);
 
         handleInitialVeloctyBoost();
+    }
+
+    private PlayerSuperJumpDirection getInnerDirection(Vector2 direction)
+    {
+        if (playerState.playerObserver.observedState == ObservedState.NEAR_LEFT_WALL)
+        {
+            return PlayerSuperJumpDirection.WALL_JUMP_RIGHT;
+        }
+        if (playerState.playerObserver.observedState == ObservedState.NEAR_RIGHT_WALL)
+        {
+            return PlayerSuperJumpDirection.WALL_JUMP_LEFT;
+        }
+
+        return direction.x > 0
+            ? PlayerSuperJumpDirection.JUMP_RIGHT
+            : PlayerSuperJumpDirection.JUMP_LEFT;
     }
 }

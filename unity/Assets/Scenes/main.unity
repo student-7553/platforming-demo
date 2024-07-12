@@ -647,7 +647,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxYVelocity: 30
-  minYVelocity: -5
+  minYVelocity: -10
 --- !u!114 &1292924936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -678,6 +678,8 @@ MonoBehaviour:
   totalTickCount: 5
   superDashJumpInitialVelocity: {x: 9, y: 8}
   superDashJumpTickThrust: {x: 5, y: 5}
+  superDashWallJumpInitialVelocity: {x: 4, y: 14}
+  superDashWallJumpTickThrust: {x: 3, y: 3}
 --- !u!114 &1292924938
 MonoBehaviour:
   m_ObjectHideFlags: 0
