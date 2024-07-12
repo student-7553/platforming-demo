@@ -49,11 +49,6 @@ public class PlayerDashAfterState : MonoBehaviour
 
     public void handleJumpActivation()
     {
-        if (playerState.playerObserver.observedState != ObservedState.GROUND)
-        {
-            return;
-        }
-
         switch (preDashType)
         {
             case DASH_TYPE.PRE_SUPERDASH_OK:

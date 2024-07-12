@@ -52,6 +52,10 @@ public class PlayerDashState : MonoBehaviour
 
                 if (effectiveDirection.x != 0 && effectiveDirection.y != 0)
                 {
+                    if (currentDashType == DASH_TYPE.PRE_WAVEDASH_1)
+                    {
+                        currentDashType = DASH_TYPE.PRE_WAVEDASH_OK;
+                    }
                     if (effectiveDirection.y > 0)
                     {
                         // upward
@@ -116,7 +120,7 @@ public class PlayerDashState : MonoBehaviour
                     || playerState.playerObserver.observedState == ObservedState.NEAR_RIGHT_WALL
                 )
                 {
-                    playerState.changeState(PlayerPossibleState.HYPER_DASH_JUMP);
+                    playerState.changeState(PlayerPossibleState.WAVE_DASH_JUMP);
                 }
                 break;
             case DASH_TYPE.PRE_SUPERDASH_OK:

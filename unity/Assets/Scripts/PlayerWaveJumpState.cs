@@ -1,10 +1,12 @@
 using System;
 using UnityEngine;
 
-public enum PlayerWaveJumpDirection
+enum PlayerWaveJumpDirection
 {
-    RIGHT,
-    LEFT,
+    JUMP_RIGHT,
+    JUMP_LEFT,
+    WALL_JUMP_LEFT,
+    WALL_JUMP_RIGHT,
 }
 
 public class PlayerWaveJumpState : MonoBehaviour
@@ -13,7 +15,7 @@ public class PlayerWaveJumpState : MonoBehaviour
     private PlayerState playerState;
 
     private bool isStateActive;
-    private PlayerWaveJumpDirection direction;
+    private PlayerWaveJumpDirection directionState;
 
     private int currentTickCount;
 
@@ -21,6 +23,7 @@ public class PlayerWaveJumpState : MonoBehaviour
 
     public Vector2 jumpInitialVelocity;
     public Vector2 jumpTickThrust;
+
     private Vector2 cachedVelocity;
 
     void Start()
@@ -42,7 +45,10 @@ public class PlayerWaveJumpState : MonoBehaviour
                 + new Vector2(Math.Abs(cachedVelocity.x), Math.Abs(cachedVelocity.y));
 
             playerRigidbody.velocity =
-                direction == PlayerWaveJumpDirection.RIGHT
+                (
+                    directionState == PlayerWaveJumpDirection.JUMP_RIGHT
+                    || directionState == PlayerWaveJumpDirection.WALL_JUMP_RIGHT
+                )
                     ? effectiveAbsoluteInitialVelocity
                     : new Vector2(
                         -effectiveAbsoluteInitialVelocity.x,
@@ -57,7 +63,12 @@ public class PlayerWaveJumpState : MonoBehaviour
         Vector2 thrust = jumpTickThrust - (jumpTickThrust * curvedPercentageThrust);
 
         Vector2 force =
-            direction == PlayerWaveJumpDirection.RIGHT ? thrust : new Vector2(-thrust.x, thrust.y);
+            (
+                directionState == PlayerWaveJumpDirection.JUMP_RIGHT
+                || directionState == PlayerWaveJumpDirection.WALL_JUMP_RIGHT
+            )
+                ? thrust
+                : new Vector2(-thrust.x, thrust.y);
 
         playerRigidbody.AddForce(force);
 
@@ -79,6 +90,22 @@ public class PlayerWaveJumpState : MonoBehaviour
     {
         isStateActive = true;
         cachedVelocity = _cachedVelocity;
-        direction = _direction.x > 0 ? PlayerWaveJumpDirection.RIGHT : PlayerWaveJumpDirection.LEFT;
+        directionState = getInnerDirection(_direction);
+    }
+
+    private PlayerWaveJumpDirection getInnerDirection(Vector2 direction)
+    {
+        if (playerState.playerObserver.observedState == ObservedState.NEAR_LEFT_WALL)
+        {
+            return PlayerWaveJumpDirection.WALL_JUMP_RIGHT;
+        }
+        if (playerState.playerObserver.observedState == ObservedState.NEAR_RIGHT_WALL)
+        {
+            return PlayerWaveJumpDirection.WALL_JUMP_LEFT;
+        }
+
+        return direction.x > 0
+            ? PlayerWaveJumpDirection.JUMP_RIGHT
+            : PlayerWaveJumpDirection.JUMP_LEFT;
     }
 }

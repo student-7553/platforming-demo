@@ -129,7 +129,7 @@ public class PlayerObserver : MonoBehaviour
         RaycastHit2D rayCastResult = Physics2D.Raycast(
             originPosition,
             Vector2.down,
-            0.25f,
+            0.15f,
             layerMask
         );
 
@@ -148,7 +148,7 @@ public class PlayerObserver : MonoBehaviour
         RaycastHit2D rayCastResult = Physics2D.Raycast(
             originPosition,
             Vector2.right,
-            0.25f,
+            0.15f,
             layerMask
         );
 
@@ -165,7 +165,7 @@ public class PlayerObserver : MonoBehaviour
         RaycastHit2D rayCastResult = Physics2D.Raycast(
             originPosition,
             Vector2.left,
-            0.25f,
+            0.15f,
             layerMask
         );
 

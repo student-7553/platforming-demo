@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public enum PlayerSuperJumpDirection
+enum PlayerSuperJumpDirection
 {
     JUMP_RIGHT,
     JUMP_LEFT,
