@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum PlayerJumpDirection
@@ -43,17 +44,7 @@ public class PlayerJumpState : MonoBehaviour
 
         if (tickCounter == 0)
         {
-            Vector2 effectiveJumpInitialVelocity = jumpInitialVelocity;
-            if (direction == PlayerJumpDirection.STILL)
-            {
-                effectiveJumpInitialVelocity.x = 0;
-            }
-            else if (direction == PlayerJumpDirection.LEFT)
-            {
-                effectiveJumpInitialVelocity.x = -effectiveJumpInitialVelocity.x;
-            }
-
-            playerRigidbody.velocity = effectiveJumpInitialVelocity;
+            handleInitialVeloctyBoost();
         }
 
         // can be between 0 - 1
@@ -72,6 +63,22 @@ public class PlayerJumpState : MonoBehaviour
         {
             handleJumpEnd();
         }
+    }
+
+    private void handleInitialVeloctyBoost()
+    {
+        Vector2 effectiveJumpInitialVelocity = jumpInitialVelocity;
+
+        if (direction == PlayerJumpDirection.STILL)
+        {
+            effectiveJumpInitialVelocity.x = 0;
+        }
+        else if (direction == PlayerJumpDirection.LEFT)
+        {
+            effectiveJumpInitialVelocity.x = -effectiveJumpInitialVelocity.x;
+        }
+
+        playerRigidbody.velocity = playerRigidbody.velocity + effectiveJumpInitialVelocity;
     }
 
     public void stateEnd()

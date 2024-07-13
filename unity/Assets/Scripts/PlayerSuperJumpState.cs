@@ -95,7 +95,7 @@ public class PlayerSuperJumpState : MonoBehaviour
         isStateActive = false;
     }
 
-    public void handleInitialVeloctyBoost()
+    private void handleInitialVeloctyBoost()
     {
         Vector2 effectiveAbsoluteInitialVelocity = new Vector2(
             Math.Abs(cachedVelocity.x),
