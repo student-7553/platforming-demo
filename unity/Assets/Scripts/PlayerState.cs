@@ -50,13 +50,6 @@ public class PlayerState : MonoBehaviour
 
     void Start()
     {
-        if (!!Singelton.GetPlayerState())
-        {
-            Destroy(this);
-            return;
-        }
-        Singelton.SetPlayerState(this);
-
         playerObserver = GetComponent<PlayerObserver>();
         playerMovementHandler = GetComponent<PlayerMovementHandler>();
         playerJumpHandler = GetComponent<PlayerJumpState>();
@@ -69,11 +62,6 @@ public class PlayerState : MonoBehaviour
         playerHyperJumpState = GetComponent<PlayerHyperJumpState>();
 
         currentState = PlayerPossibleState.GROUND;
-    }
-
-    private void OnDestroy()
-    {
-        Singelton.SetPlayerState(null);
     }
 
     public void handleJumpAction()

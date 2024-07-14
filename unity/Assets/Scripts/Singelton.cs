@@ -1,14 +1,14 @@
 public class Singelton
 {
-    private static PlayerState playerState;
+    private static Player player;
 
-    public static void SetPlayerState(PlayerState _playerState)
+    public static void SetPlayer(Player _player)
     {
-        playerState = _playerState;
+        player = _player;
     }
 
-    public static PlayerState GetPlayerState()
+    public static Player GetPlayer()
     {
-        return playerState;
+        return player;
     }
 }
