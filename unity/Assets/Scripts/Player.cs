@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -14,5 +12,10 @@ public class Player : MonoBehaviour
             return;
         }
         Singelton.SetPlayer(this);
+    }
+
+    public void handleRestart()
+    {
+        Debug.Log("Handle restart.......");
     }
 }
